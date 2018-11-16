@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package regras_de_negocio;
+package RegrasNegocio;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -12,14 +12,15 @@ import java.util.ArrayList;
  *
  * @author b2198
  */
-public class Formulario {
+public class Formulario
+{
     public String nome;
     public String descricao;
     public LocalTime dataInicio;
     public LocalTime dataTermino;
     public String nomeAutor;
     public ArrayList<Pergunta> questao;
-
+    
     public Formulario(){
         
     }
@@ -64,5 +65,13 @@ public class Formulario {
         return true;
     }
     
+    private boolean salvar()
+    {
+        boolean ok = false;
+        
+        /* Primeiramente precisamos ler todos os dados que esão gravados nesta classe */
+        
+        return ok;
+    }
     
 }
