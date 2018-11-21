@@ -1,3 +1,6 @@
 build 
 /nbproject/private/
 /dist/
+/.idea/*.iml
+/.idea/modules.xml
+/.idea/workspace.xml
