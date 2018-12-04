@@ -37,7 +37,7 @@
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="bResponder" alignment="0" max="32767" attributes="0"/>
                   <Component id="bCriar" alignment="0" max="32767" attributes="0"/>
-                  <Component id="bGerenciar" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
+                  <Component id="bApagar" alignment="0" min="-2" pref="85" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -74,7 +74,7 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bGerenciar" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bApagar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bInfo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bSair" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -105,12 +105,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bResponderActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="bGerenciar">
+    <Component class="javax.swing.JButton" name="bApagar">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Gerenciar"/>
+        <Property name="text" type="java.lang.String" value="Apagar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bGerenciarActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bApagarActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">

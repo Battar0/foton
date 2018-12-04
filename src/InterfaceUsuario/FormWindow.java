@@ -28,7 +28,6 @@ public class FormWindow extends javax.swing.JFrame {
         initComponents();
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
-        lista = new ArrayList<Pergunta>();
 
         this.setLocationRelativeTo(null);
         
@@ -60,6 +59,7 @@ public class FormWindow extends javax.swing.JFrame {
         bModificarPergunta = new javax.swing.JButton();
         bNovaPergunta = new javax.swing.JButton();
         perguntas = new javax.swing.JComboBox<>();
+        bDescartar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         descricao = new javax.swing.JTextArea();
@@ -163,14 +163,25 @@ public class FormWindow extends javax.swing.JFrame {
             }
         });
 
+        bDescartar.setText("Descartar");
+        bDescartar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDescartarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(perguntas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(perguntas, 0, 274, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(94, 94, 94)
+                .addComponent(bDescartar, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -180,16 +191,18 @@ public class FormWindow extends javax.swing.JFrame {
                         .addComponent(bDeletarPergunta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(bSair, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(bSalvar, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
+                            .addComponent(bSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap()))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(99, Short.MAX_VALUE)
                 .addComponent(perguntas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
+                .addGap(5, 5, 5)
+                .addComponent(bDescartar)
+                .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -399,12 +412,12 @@ public class FormWindow extends javax.swing.JFrame {
                 throw new PerguntaInexistenteException();
             
             else{
-                pergunta = lista.get(perguntas.getSelectedIndex());
+                pergunta = formulario.questoes.get(perguntas.getSelectedIndex());
 
                 QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta.getTexto(), null);
                 modificarPergunta.setVisible(true);
 
-                lista.remove(pergunta);
+                formulario.questoes.remove(pergunta);
                 atualizar();
             }
         }
@@ -422,7 +435,7 @@ public class FormWindow extends javax.swing.JFrame {
                 throw new PerguntaInexistenteException();
             
             else{
-                lista.remove(perguntas.getSelectedIndex());
+                formulario.questoes.remove(perguntas.getSelectedIndex());
                 atualizar(); 
             }
         }
@@ -463,22 +476,17 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_dataTerminoKeyReleased
 
     private void dataInicioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataInicioFocusLost
-        /*SimpleDateFormat sdfs = new SimpleDateFormat( "dd/MM/yyyy" );   
-        String dataFormatada = sdfs.format(dataInicio.getText());
-        
-        LocalTime DataFormatada = LocalTime.parse(dataFormatada);
-        
-        formulario.setDataInicio(DataFormatada);*/
+        formulario.setDataInicio(dataInicio.getText());
     }//GEN-LAST:event_dataInicioFocusLost
 
     private void dataTerminoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataTerminoFocusLost
-        /*SimpleDateFormat sdfs = new SimpleDateFormat( "dd/MM/yyyy" );   
-        String dataFormatada = sdfs.format(dataTermino.getText());
-        
-        LocalTime DataFormatada = LocalTime.parse(dataFormatada);
-        
-        formulario.setDataTermino(DataFormatada);*/
+        formulario.setDataInicio(dataTermino.getText());
     }//GEN-LAST:event_dataTerminoFocusLost
+
+    private void bDescartarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDescartarActionPerformed
+        mwd.lista.remove(formulario);
+        dispose();
+    }//GEN-LAST:event_bDescartarActionPerformed
 
     void addTaPerguntas(String str){
         taPerguntas.append("#" + taPerguntas.getLineCount() + " "+ str + '\n');
@@ -496,6 +504,7 @@ public class FormWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bDeletarPergunta;
+    private javax.swing.JButton bDescartar;
     private javax.swing.JButton bModificarPergunta;
     private javax.swing.JButton bNovaPergunta;
     private javax.swing.JButton bSair;

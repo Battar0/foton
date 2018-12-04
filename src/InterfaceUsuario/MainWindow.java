@@ -5,10 +5,13 @@
  */
 package InterfaceUsuario;
 
+import Excecoes.FormularioInexistenteException;
 import FDF.fdfFile;
 import FDF.fdfWriter;
 import regrasNegocio.Formulario;
 import java.util.*;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -39,7 +42,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         bCriar = new javax.swing.JButton();
         bResponder = new javax.swing.JButton();
-        bGerenciar = new javax.swing.JButton();
+        bApagar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         cbFormularios = new javax.swing.JComboBox<>();
         bInfo = new javax.swing.JButton();
@@ -67,10 +70,10 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        bGerenciar.setText("Gerenciar");
-        bGerenciar.addActionListener(new java.awt.event.ActionListener() {
+        bApagar.setText("Apagar");
+        bApagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bGerenciarActionPerformed(evt);
+                bApagarActionPerformed(evt);
             }
         });
 
@@ -94,7 +97,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(bResponder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bCriar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bGerenciar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bApagar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel1)))
@@ -123,7 +126,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(cbFormularios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bGerenciar)
+                    .addComponent(bApagar)
                     .addComponent(bInfo)
                     .addComponent(bSair))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -144,13 +147,26 @@ public class MainWindow extends javax.swing.JFrame {
             System.out.println("Formulario #" + ( count + 1 ) + ": " + lista.get(count).getNome());
     }//GEN-LAST:event_bResponderActionPerformed
 
-    private void bGerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGerenciarActionPerformed
-        ManageFormWindow form = new ManageFormWindow();
-        form.setVisible(true);
-    }//GEN-LAST:event_bGerenciarActionPerformed
+    private void bApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApagarActionPerformed
+        try{
+            if(cbFormularios.getItemCount() == 0)
+                throw new FormularioInexistenteException();
+            
+            else{
+                lista.remove(cbFormularios.getSelectedIndex());
+                atualizar();
+            }
+        }
+        
+        catch(FormularioInexistenteException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_bApagarActionPerformed
 
     private void bSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSairActionPerformed
-        dispose();
+        System.exit(0);
     }//GEN-LAST:event_bSairActionPerformed
 
     /**
@@ -208,8 +224,8 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bApagar;
     private javax.swing.JButton bCriar;
-    private javax.swing.JButton bGerenciar;
     private javax.swing.JButton bInfo;
     private javax.swing.JButton bResponder;
     private javax.swing.JButton bSair;

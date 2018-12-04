@@ -170,7 +170,7 @@ public class QuestionWindow extends javax.swing.JFrame {
                     // Cria a pergunta e adciona a lista
                     PerguntaAberta pergunta = new PerguntaAberta(enunciado.getText());
                     
-                    formPai.lista.add(pergunta);
+                    formPai.formulario.questoes.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
                 }
             
@@ -189,7 +189,7 @@ public class QuestionWindow extends javax.swing.JFrame {
                     // Cria a pergunta e adciona a lista
                     PerguntaFechada pergunta = new PerguntaFechada(enunciado.getText(), str);
                     
-                    formPai.lista.add(pergunta);
+                    formPai.formulario.questoes.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
                 }
                 
