@@ -8,6 +8,8 @@ package InterfaceUsuario;
 import regrasNegocio.*;
 import java.util.*;
 import Excecoes.*;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -59,8 +61,8 @@ public class FormWindow extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         descricao = new javax.swing.JTextArea();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        dataInicio = new javax.swing.JFormattedTextField();
+        dataTermino = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
 
@@ -102,6 +104,9 @@ public class FormWindow extends javax.swing.JFrame {
             }
         });
         nome_autor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nome_autorKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 nome_autorKeyTyped(evt);
             }
@@ -203,17 +208,45 @@ public class FormWindow extends javax.swing.JFrame {
         descricao.setColumns(20);
         descricao.setRows(5);
         descricao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                descricaoKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 descricaoKeyTyped(evt);
             }
         });
         jScrollPane2.setViewportView(descricao);
 
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
-        jFormattedTextField1.setToolTipText("Exemplo: 20/05/2018");
+        dataInicio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
+        dataInicio.setToolTipText("Exemplo: 20/05/2018");
+        dataInicio.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                dataInicioFocusLost(evt);
+            }
+        });
+        dataInicio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dataInicioActionPerformed(evt);
+            }
+        });
+        dataInicio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                dataInicioKeyReleased(evt);
+            }
+        });
 
-        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
-        jFormattedTextField2.setToolTipText("Exemplo: 20/05/2018");
+        dataTermino.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
+        dataTermino.setToolTipText("Exemplo: 20/05/2018");
+        dataTermino.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                dataTerminoFocusLost(evt);
+            }
+        });
+        dataTermino.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                dataTerminoKeyReleased(evt);
+            }
+        });
 
         jLabel7.setText("dd/mm/yyyy");
 
@@ -240,8 +273,8 @@ public class FormWindow extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jFormattedTextField2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
+                                    .addComponent(dataTermino, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dataInicio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
@@ -285,13 +318,13 @@ public class FormWindow extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dataInicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5)
                         .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dataTermino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel6)
@@ -324,7 +357,7 @@ public class FormWindow extends javax.swing.JFrame {
 
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
         try{
-            if (nome_autor.getText().isEmpty() || nome_formulario.getText().isEmpty() || descricao.getText().isEmpty()) // adcionar data na verificação
+            if (nome_autor.getText().isEmpty() || nome_formulario.getText().isEmpty() || descricao.getText().isEmpty() || dataInicio.getText().isEmpty() || dataTermino.getText().isEmpty()) // adcionar data na verificação
                 throw new DescricaoObrigatoriaNaoInformadaException();
             
             else{
@@ -343,11 +376,11 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bSalvarActionPerformed
 
     private void nome_autorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_autorKeyTyped
-        formulario.setNomeAutor(nome_autor.getText());
+        
     }//GEN-LAST:event_nome_autorKeyTyped
 
     private void descricaoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descricaoKeyTyped
-        formulario.setDescricao(descricao.getText());
+        
     }//GEN-LAST:event_descricaoKeyTyped
 
     private void bNovaPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovaPerguntaActionPerformed
@@ -356,16 +389,29 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bNovaPerguntaActionPerformed
 
     private void bModificarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bModificarPerguntaActionPerformed
-        //WoP
+    
+        try{
+            Pergunta pergunta = null;
+
+            if(perguntas.getItemCount() == 0)
+                throw new PerguntaInexistenteException();
+            
+            else{
+                pergunta = lista.get(perguntas.getSelectedIndex());
+
+                QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta.getTexto(), null);
+                modificarPergunta.setVisible(true);
+
+                lista.remove(pergunta);
+                atualizar();
+            }
+        }
         
-        Pergunta pergunta = null;
-        
-        System.out.println(perguntas.getSelectedIndex() + " - " + lista.get(0).getTexto());
-        pergunta = lista.get(perguntas.getSelectedIndex());
-        
-        QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta.getTexto(), null);
-        modificarPergunta.setVisible(true);
-        
+        catch(PerguntaInexistenteException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_bModificarPerguntaActionPerformed
 
     private void bDeletarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeletarPerguntaActionPerformed
@@ -394,6 +440,44 @@ public class FormWindow extends javax.swing.JFrame {
         formulario.setNome(nome_formulario.getText());
     }//GEN-LAST:event_nome_formularioKeyReleased
 
+    private void nome_autorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_autorKeyReleased
+        formulario.setNomeAutor(nome_autor.getText());
+    }//GEN-LAST:event_nome_autorKeyReleased
+
+    private void descricaoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descricaoKeyReleased
+        formulario.setDescricao(descricao.getText());
+    }//GEN-LAST:event_descricaoKeyReleased
+
+    private void dataInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataInicioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dataInicioActionPerformed
+
+    private void dataInicioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dataInicioKeyReleased
+        
+    }//GEN-LAST:event_dataInicioKeyReleased
+
+    private void dataTerminoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_dataTerminoKeyReleased
+        
+    }//GEN-LAST:event_dataTerminoKeyReleased
+
+    private void dataInicioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataInicioFocusLost
+        /*SimpleDateFormat sdfs = new SimpleDateFormat( "dd/MM/yyyy" );   
+        String dataFormatada = sdfs.format(dataInicio.getText());
+        
+        LocalTime DataFormatada = LocalTime.parse(dataFormatada);
+        
+        formulario.setDataInicio(DataFormatada);*/
+    }//GEN-LAST:event_dataInicioFocusLost
+
+    private void dataTerminoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataTerminoFocusLost
+        /*SimpleDateFormat sdfs = new SimpleDateFormat( "dd/MM/yyyy" );   
+        String dataFormatada = sdfs.format(dataTermino.getText());
+        
+        LocalTime DataFormatada = LocalTime.parse(dataFormatada);
+        
+        formulario.setDataTermino(DataFormatada);*/
+    }//GEN-LAST:event_dataTerminoFocusLost
+
     void addTaPerguntas(String str){
         taPerguntas.append("#" + taPerguntas.getLineCount() + " "+ str + '\n');
         perguntas.addItem("Pergunta #" + (perguntas.getItemCount() + 1));
@@ -414,9 +498,9 @@ public class FormWindow extends javax.swing.JFrame {
     private javax.swing.JButton bNovaPergunta;
     private javax.swing.JButton bSair;
     private javax.swing.JButton bSalvar;
+    private javax.swing.JFormattedTextField dataInicio;
+    private javax.swing.JFormattedTextField dataTermino;
     private javax.swing.JTextArea descricao;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -33,8 +33,9 @@ public class QuestionWindow extends javax.swing.JFrame {
         if (alternativas == null)
             cbAlternativas.getItemAt(1);
         
-        for(int count = 0; count < alternativas.length; count++)
-            taAlternativas.append(alternativas[count]);
+        else
+            for(int count = 0; count < alternativas.length; count++)
+                taAlternativas.append(alternativas[count]);
     }
     
     private void defineConfig(){
