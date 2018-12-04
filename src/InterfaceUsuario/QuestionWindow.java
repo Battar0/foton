@@ -20,7 +20,9 @@ public class QuestionWindow extends javax.swing.JFrame {
         initComponents();
         defineConfig();
         
-        formPai = form;   
+        formPai = form;
+
+        this.setLocationRelativeTo(null);
     }
     
     public QuestionWindow(FormWindow form, String enunciado, String[] alternativas){

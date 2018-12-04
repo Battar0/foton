@@ -29,6 +29,8 @@ public class FormWindow extends javax.swing.JFrame {
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
         lista = new ArrayList<Pergunta>();
+
+        this.setLocationRelativeTo(null);
         
         mwd = mwindow;
     }
