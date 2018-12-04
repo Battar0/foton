@@ -22,8 +22,7 @@ public class fdfWriter extends fdfFormat
     public fdfWriter(String nomeArquivo)
     {
         arquivo = nomeArquivo;
-        if(super.outputFileHandle == null)
-            super.outputFileHandle = new File(arquivo);
+        super.outputFileHandle = new File(this.arquivo);
         
         fdfWriter_file = null;
     }
@@ -34,10 +33,10 @@ public class fdfWriter extends fdfFormat
      */
     private void init() throws FileNotFoundException, IOException
     {
-        if(outputFileHandle.exists())
-            fdfWriter_file = openWrite(arquivo, true);
+        if(super.outputFileHandle.exists())
+            fdfWriter_file = openWrite(this.arquivo, true);
         else
-            fdfWriter_file = openWrite(arquivo);
+            fdfWriter_file = openWrite(this.arquivo);
     }
     
     private void stop() throws IOException
@@ -106,6 +105,8 @@ public class fdfWriter extends fdfFormat
         RandomAccessFile raf = new RandomAccessFile(localFileHandle.getName(), "rws");
         String original_file_line;
 
+        System.out.println( "Abrindo arquivo: " + localFileHandle.getAbsolutePath());
+        
         // Preciso garantir que estou no início do arquivo
         fdfWriter_file.seek(0);
 
@@ -116,13 +117,13 @@ public class fdfWriter extends fdfFormat
             if(original_file_line == null)
                 break;
 
-            if(original_file_line.startsWith(super.nome_fim_secao_respostas))
+            if(original_file_line.startsWith(super.nome_fim_secao_perguntas))
             {
                 // Pego os dados, sobrescrevo essa posição e finalizo a seção
-                raf.writeBytes(data + "\n" + super.nome_fim_secao_respostas + "\n");
+                raf.writeBytes(data + "\n" + super.nome_fim_secao_perguntas + "\n");
             } else {
                 // Pego os dados do arquivo original e copio para o arquivo temporário
-                raf.writeBytes(original_file_line);
+                raf.writeBytes(original_file_line + "\n");
             }
         }
         
@@ -132,11 +133,19 @@ public class fdfWriter extends fdfFormat
         // Fecha o arquivo temporário
         raf.close();
         
+        // Apága o arquivo original
+        File original = new File(this.arquivo);
+        original.delete();
+        
+        File newFile = new File(this.arquivo);
+        
         // Agora sobrescrevemos o original com o conteúdo do arquivo temporário
-        boolean renameTo = localFileHandle.renameTo(super.inputFileHandle);
+        boolean renameTo = localFileHandle.renameTo(newFile);
         if(!renameTo)
         {
             throw new IOException( "Não foi possível renomear o arquivo temporário");
+        } else {
+            System.out.println( "Arquivo renomeado para: " + newFile.getAbsolutePath());
         }
     }
     

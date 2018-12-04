@@ -8,6 +8,7 @@ package InterfaceUsuario;
 import Excecoes.FormularioInexistenteException;
 import FDF.fdfFile;
 import FDF.fdfWriter;
+import java.io.IOException;
 import regrasNegocio.Formulario;
 import java.util.*;
 import javax.swing.JDialog;
@@ -27,6 +28,18 @@ public class MainWindow extends javax.swing.JFrame {
     public MainWindow() {
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        fdfWriter f = new fdfWriter("lucas.fdf");
+        String[] alternativas = {
+            "Lucas", "Virus", "Porra"
+        };
+                
+        try {
+        f.writePergunta("Titulo", fdfFile.tipos_perguntas.LIVRE, 60, alternativas);
+        } catch(IOException e)
+        {
+            e.printStackTrace();
+        }
         
         lista = new ArrayList<Formulario>();
     }
