@@ -16,8 +16,8 @@ public class Formulario
 {
     private String nome;
     private String descricao;
-    private LocalTime dataInicio;
-    private LocalTime dataTermino;
+    private String dataInicio;
+    private String dataTermino;
     private String nomeAutor;
     private ArrayList<Pergunta> questoes;
     
@@ -35,11 +35,11 @@ public class Formulario
         return descricao;
     }
 
-    public LocalTime getDataInicio() {
+    public String getDataInicio() {
         return dataInicio;
     }
 
-    public LocalTime getDataTermino() {
+    public String getDataTermino() {
         return dataTermino;
     }
 
@@ -69,13 +69,13 @@ public class Formulario
         return true;
     }
 
-    public boolean setDataInicio(LocalTime dataInicio) {
+    public boolean setDataInicio(String dataInicio) {
         this.dataInicio = dataInicio;
         
         return true;
     }
 
-    public boolean setDataTermino(LocalTime dataTermino) {
+    public boolean setDataTermino(String dataTermino) {
         this.dataTermino = dataTermino;
         
         return true;
