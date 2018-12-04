@@ -1,6 +1,6 @@
 package regrasNegocio;
 
-public abstract class PerguntaFechada extends Pergunta {
+public class PerguntaFechada extends Pergunta {
 
     private String[] alternativas;
 

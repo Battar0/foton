@@ -56,6 +56,12 @@ public class Formulario
         
         return true;
     }
+    
+    public boolean setNomeAutor(String nome) {
+        this.nomeAutor = nome;
+        
+        return true;
+    }
 
     public boolean setDescricao(String descricao) {
         this.descricao = descricao;
