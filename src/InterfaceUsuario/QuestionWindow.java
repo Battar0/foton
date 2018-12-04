@@ -176,8 +176,7 @@ public class QuestionWindow extends javax.swing.JFrame {
             
                 else{
                     // Recebe as alternativas inseridas 
-                    String saux = new String();
-                    saux = taAlternativas.getText();
+                    String saux = taAlternativas.getText();
                     
                     // Verifica se existe alternativas
                     if(saux.isEmpty())

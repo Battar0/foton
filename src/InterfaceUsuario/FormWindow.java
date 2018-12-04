@@ -19,7 +19,6 @@ import javax.swing.JOptionPane;
  */
 public class FormWindow extends javax.swing.JFrame {
     Formulario formulario;
-    List<Pergunta> lista;
     MainWindow mwd;
     /**
      * Creates new form NewJFrame
@@ -497,8 +496,8 @@ public class FormWindow extends javax.swing.JFrame {
         taPerguntas.setText("");
         perguntas.removeAllItems();
         
-        for(int count = 0; count < lista.size(); count++)
-            addTaPerguntas(lista.get(count).getTexto());
+        for(int count = 0; count < formulario.questoes.size(); count++)
+            addTaPerguntas(formulario.questoes.get(count).getTexto());
     }
     
 
