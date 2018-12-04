@@ -5,6 +5,9 @@
  */
 package InterfaceUsuario;
 
+import FDF.fdfFile;
+import FDF.fdfWriter;
+
 /**
  *
  * @author Windows 10
