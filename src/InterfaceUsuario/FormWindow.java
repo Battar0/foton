@@ -23,6 +23,8 @@ public class FormWindow extends javax.swing.JFrame {
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
         lista = new ArrayList<Pergunta>();
+
+        this.setLocationRelativeTo(null);
     }
     
     /**
@@ -344,7 +346,21 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bModificarPerguntaActionPerformed
 
     private void bDeletarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeletarPerguntaActionPerformed
-        System.out.println("Recurso indisponível no momento :c");
+        int selection = perguntas.getSelectedIndex();
+        String[] text = taPerguntas.getText().split("\n");
+        StringBuilder textBuilder = new StringBuilder();
+        for(int i = 0; i < text.length; i++){
+            if(i != selection){
+                textBuilder.append(text[i]);
+                if(i < text.length-1) {
+                    textBuilder.append("\n");
+                }
+            }
+        }
+        taPerguntas.setText(textBuilder.toString());
+        perguntas.removeItemAt(selection);
+        lista.remove(selection);
+
     }//GEN-LAST:event_bDeletarPerguntaActionPerformed
 
     void addTaPerguntas(String str){
