@@ -22,6 +22,7 @@ public class MainWindow extends javax.swing.JFrame {
      */
     public MainWindow() {
         initComponents();
+        this.setLocationRelativeTo(null);
         
         lista = new ArrayList<Formulario>();
     }

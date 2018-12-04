@@ -18,6 +18,7 @@ public class ManageFormWindow extends javax.swing.JFrame {
      */
     public ManageFormWindow() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
