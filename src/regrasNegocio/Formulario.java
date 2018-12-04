@@ -19,7 +19,7 @@ public class Formulario
     private String dataInicio;
     private String dataTermino;
     private String nomeAutor;
-    private ArrayList<Pergunta> questoes;
+    public ArrayList<Pergunta> questoes;
     
     public Formulario(String nome, String descricao, String nomeAutor){
         this.nome = nome;

@@ -12,6 +12,7 @@ import regrasNegocio.Formulario;
 import java.util.*;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import regrasNegocio.Pergunta;
 
 /**
  *
@@ -143,8 +144,27 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bCriarActionPerformed
     
     private void bResponderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResponderActionPerformed
-        for(int count = 0; count < lista.size(); count++)
-            System.out.println("Formulario #" + ( count + 1 ) + ": " + lista.get(count).getNome());
+        Pergunta pergunta = this.lista.get(cbFormularios.getSelectedIndex()).questoes.get(0);
+        String _tipo = pergunta.getTipo();
+        
+        if(_tipo == "Aberta"){
+            ResponderAberta resp = new ResponderAberta();
+            resp.setVisible(true);
+        }
+        
+        else if(_tipo == "Lista" || _tipo == "Exclusiva"){
+            ResponderLista resp = new ResponderLista();
+            resp.setVisible(true);
+        }
+        else if(_tipo == "Alternativa"){
+            ResponderAlternativa resp = new ResponderAlternativa();
+            resp.setVisible(true);
+        }
+        
+        else{
+            ResponderOpcional resp = new ResponderOpcional();
+            resp.setVisible(true);
+        }
     }//GEN-LAST:event_bResponderActionPerformed
 
     private void bApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApagarActionPerformed

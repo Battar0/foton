@@ -380,14 +380,20 @@ public class FormWindow extends javax.swing.JFrame {
                 //-------------------------------------------------------<WOP>---------------------------------------------------------------------------------
                 fdfWriter wrt = new fdfWriter(nome_formulario.toString());
                 //wrt.writePergunta(titulo_pergunta, fdfFile.tipos_perguntas.LIVRE, HEIGHT, alternativas);
+
                 
-                String[] hihi = null;
+                String hihi = new String();
+                hihi = "algumacoisa outracoisa";
+                
+                String[] hoho = hihi.split(" ");
+                
                 
                 try{
-                for(int count = 0; count < formulario.questoesSize(); count++)
-                    wrt.writePergunta(formulario.get(count).getTexto(), fdfFile.tipos_perguntas.LIVRE, HEIGHT, hihi);
+                    for(int count = 0; count < formulario.questoesSize(); count++)
+                        wrt.writePergunta(formulario.get(count).getTexto(), fdfFile.tipos_perguntas.LIVRE, count, hoho);
                 
                 }catch(Exception e){
+                    System.out.println(formulario.get(0).getTexto());
                 }
                 
                 //-------------------------------------------------------</WOP>--------------------------------------------------------------------------------

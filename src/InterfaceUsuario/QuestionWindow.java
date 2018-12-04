@@ -169,6 +169,7 @@ public class QuestionWindow extends javax.swing.JFrame {
                 if (cbAlternativas.getSelectedItem().toString() == "Aberta"){
                     // Cria a pergunta e adciona a lista
                     PerguntaAberta pergunta = new PerguntaAberta(enunciado.getText());
+                    pergunta.setTipo(cbAlternativas.getSelectedItem().toString());
                     
                     formPai.formulario.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
@@ -187,6 +188,7 @@ public class QuestionWindow extends javax.swing.JFrame {
                     
                     // Cria a pergunta e adciona a lista
                     PerguntaFechada pergunta = new PerguntaFechada(enunciado.getText(), str);
+                    pergunta.setTipo(cbAlternativas.getSelectedItem().toString());
                     
                     formPai.formulario.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
@@ -223,6 +225,9 @@ public class QuestionWindow extends javax.swing.JFrame {
         // Habilita a edição das alternativas
         else
             taAlternativas.setEnabled(true);
+        
+        // Seta o tipo de pergunta
+        
     }//GEN-LAST:event_cbAlternativasActionPerformed
 
 

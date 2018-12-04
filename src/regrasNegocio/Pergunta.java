@@ -12,11 +12,20 @@ package regrasNegocio;
 public abstract class Pergunta {
     private String texto;
     private String[] resposta;
+    private String tipo;
 
     public Pergunta(String texto){
         setTexto(texto);
     }
 
+    public void setTipo(String str){
+        tipo = str;
+    }
+    
+    public String getTipo(){
+        return tipo;
+    }
+    
     public String getTexto() 
     {
         return texto;
