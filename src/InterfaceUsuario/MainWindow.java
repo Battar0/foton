@@ -7,18 +7,23 @@ package InterfaceUsuario;
 
 import FDF.fdfFile;
 import FDF.fdfWriter;
+import regrasNegocio.Formulario;
+import java.util.*;
 
 /**
  *
  * @author Windows 10
  */
 public class MainWindow extends javax.swing.JFrame {
+    List<Formulario> lista;
 
     /**
      * Creates new form NewJFrame
      */
     public MainWindow() {
         initComponents();
+        
+        lista = new ArrayList<Formulario>();
     }
 
     /**
@@ -31,9 +36,13 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        bCriar = new javax.swing.JButton();
+        bResponder = new javax.swing.JButton();
+        bGerenciar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        cbFormularios = new javax.swing.JComboBox<>();
+        bInfo = new javax.swing.JButton();
+        bSair = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Fóton");
@@ -41,26 +50,37 @@ public class MainWindow extends javax.swing.JFrame {
         setLocationByPlatform(true);
         setResizable(false);
 
-        jLabel1.setText("Formulários");
+        jLabel1.setText("Fóton");
 
-        jButton1.setText("Criar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bCriar.setText("Criar");
+        bCriar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bCriarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Responder");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        bResponder.setText("Responder");
+        bResponder.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                bResponderActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Gerenciar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        bGerenciar.setText("Gerenciar");
+        bGerenciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                bGerenciarActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Formulários Disponíveis");
+
+        bInfo.setText("Info");
+
+        bSair.setText("Sair");
+        bSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSairActionPerformed(evt);
             }
         });
 
@@ -71,13 +91,21 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bResponder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bCriar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bGerenciar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel1)))
-                .addContainerGap(97, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bSair, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbFormularios, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,11 +113,18 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bCriar)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bResponder)
+                    .addComponent(cbFormularios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bGerenciar)
+                    .addComponent(bInfo)
+                    .addComponent(bSair))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -98,19 +133,24 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        FormWindow form = new FormWindow();
-        form.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void bCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCriarActionPerformed
+        FormWindow formWindow = new FormWindow(this);
+        formWindow.setVisible(true);
+    }//GEN-LAST:event_bCriarActionPerformed
+    
+    private void bResponderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResponderActionPerformed
+        for(int count = 0; count < lista.size(); count++)
+            System.out.println("Formulario #" + ( count + 1 ) + ": " + lista.get(count).getNome());
+    }//GEN-LAST:event_bResponderActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        System.out.println("Recurso indisponível no momento :c");
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void bGerenciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bGerenciarActionPerformed
         ManageFormWindow form = new ManageFormWindow();
         form.setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_bGerenciarActionPerformed
+
+    private void bSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSairActionPerformed
+        dispose();
+    }//GEN-LAST:event_bSairActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,11 +190,30 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
     }
+    
+    void addFormulario(Formulario form){
+        lista.add(form);
+    }
+    
+    void rmvFormulario(Formulario form){
+        lista.remove(form);
+    }
+    
+    void atualizar(){
+        cbFormularios.removeAllItems();
+        
+        for(int count = 0; count < lista.size(); count++)
+            cbFormularios.addItem(lista.get(count).getNome());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton bCriar;
+    private javax.swing.JButton bGerenciar;
+    private javax.swing.JButton bInfo;
+    private javax.swing.JButton bResponder;
+    private javax.swing.JButton bSair;
+    private javax.swing.JComboBox<String> cbFormularios;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
 }
