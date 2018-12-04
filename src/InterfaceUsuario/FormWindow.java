@@ -6,6 +6,7 @@
 package InterfaceUsuario;
 
 import regrasNegocio.*;
+import java.util.*;
 
 /**
  *
@@ -13,6 +14,7 @@ import regrasNegocio.*;
  */
 public class FormWindow extends javax.swing.JFrame {
     Formulario formulario;
+    List<Pergunta> lista;
     /**
      * Creates new form NewJFrame
      */
@@ -20,6 +22,7 @@ public class FormWindow extends javax.swing.JFrame {
         initComponents();
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
+        lista = new ArrayList<Pergunta>();
     }
     
     /**
@@ -313,12 +316,10 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_descricaoKeyTyped
 
     private void bNovaPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovaPerguntaActionPerformed
-        Pergunta novaPergunta;
+        Pergunta novaPergunta = null;
         
-        QuestionWindow jNovaPergunta = new QuestionWindow();
+        QuestionWindow jNovaPergunta = new QuestionWindow(novaPergunta, this);
         jNovaPergunta.setVisible(true);
-        
-        //taPerguntas.append(string);
     }//GEN-LAST:event_bNovaPerguntaActionPerformed
 
     private void bModificarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bModificarPerguntaActionPerformed
@@ -329,6 +330,10 @@ public class FormWindow extends javax.swing.JFrame {
         System.out.println("Recurso indisponível no momento :c");
     }//GEN-LAST:event_bDeletarPerguntaActionPerformed
 
+    void addTaPerguntas(String str){
+        taPerguntas.append(str + '\n');
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bDeletarPergunta;

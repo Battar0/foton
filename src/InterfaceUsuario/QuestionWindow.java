@@ -4,15 +4,20 @@
  * and open the template in the editor.
  */
 package InterfaceUsuario;
+
 import regrasNegocio.*;
+import Excecoes.*;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 
 public class QuestionWindow extends javax.swing.JFrame {
     Pergunta pergunta;
+    FormWindow formPai;
     /**
      * Creates new form QuestionWindow
      */
-    public QuestionWindow() {
+    public QuestionWindow(Pergunta novaPergunta, FormWindow form) {
         initComponents();
         
         cbAlternativas.addItem("Aberta");
@@ -20,6 +25,9 @@ public class QuestionWindow extends javax.swing.JFrame {
         cbAlternativas.addItem("Alternativa");
         cbAlternativas.addItem("Exclusiva");
         cbAlternativas.addItem("Opcional");
+        
+        formPai = form;
+        pergunta = novaPergunta;
     }
 
     /**
@@ -131,36 +139,41 @@ public class QuestionWindow extends javax.swing.JFrame {
     private void bDescartarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDescartarActionPerformed
         dispose();
     }//GEN-LAST:event_bDescartarActionPerformed
-    
-    private String bSalvarActionPerformed(java.awt.event.ActionEvent evt) { 
-        if(enunciado.getText() == null)
-            System.out.println("Exception Enunciado");
-            
-        else{
-            if (cbAlternativas.getSelectedItem().toString() == "Aberta"){
-                pergunta = new PerguntaAberta(enunciado.getText());
-            }
+   
+    private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
+        try{
+            if(enunciado.getText().isEmpty())
+                throw new EnunciadoNaoInformadoException();
 
             else{
-                String saux = new String();
-                saux = taAlternativas.getText();
+                if (cbAlternativas.getSelectedItem().toString() == "Aberta")
+                    pergunta = new PerguntaAberta(enunciado.getText());
+            
 
-                String[] str = saux.split("\n");
+                else{
+                    String saux = new String();
+                    saux = taAlternativas.getText();
 
-                pergunta = new PerguntaFechada(enunciado.getText(), str);
+                    String[] str = saux.split("\n");
+
+                    pergunta = new PerguntaFechada(enunciado.getText(), str);
+                }
+
+                formPai.addTaPerguntas(enunciado.getText());
+                formPai.lista.add(pergunta);
+
+                dispose();
             }
-
-            dispose();
+        }
+            
+        catch (EnunciadoNaoInformadoException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
         }
         
-        return enunciado.getText();
-    } 
-    /*
-    private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
-  
     }//GEN-LAST:event_bSalvarActionPerformed
-    */
-    
+
     private void cbAlternativasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlternativasActionPerformed
         if ((cbAlternativas.getSelectedItem().toString() == "Aberta") || (cbAlternativas.getSelectedItem().toString() == "Opcional")){
             taAlternativas.setEnabled(false);

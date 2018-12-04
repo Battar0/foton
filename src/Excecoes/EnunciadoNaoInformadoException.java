@@ -13,7 +13,7 @@ public class EnunciadoNaoInformadoException extends Exception
 {
     public EnunciadoNaoInformadoException()
     {
-        
+       
     }
     
     @Override
