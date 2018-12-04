@@ -7,10 +7,8 @@ package FDF;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.RandomAccessFile;
 
 /**
  * Representa um arquivo FDF.
@@ -25,10 +23,8 @@ public class fdfFile
     protected int quantidade_questoes;              // Quantidade de questões que o compõem
     protected long local_respostas;                 // Posição no arquivo aonde estão armazenadas as repsostas
     protected long local_perguntas;                 // Posição no arquivo estão armazenadas as pergntas
-    protected FileReader inputStream;          // Indentificador para o arquivo a ser lido
-    protected FileWriter outputStream;        // Identificador para o arquivo a ser criado
-    protected BufferedReader outBufferedReader;        // Leitura de dados através de um buffer
-    protected BufferedReader inBufferedReader;      // Leitura de dados através de um buffer
+    protected RandomAccessFile raf_inputStream;          // Indentificador para o arquivo a ser lido
+    protected RandomAccessFile raf_outputStream;        // Identificador para o arquivo a ser criado
     protected File inputFileHandle;                 // Indicativo para o arquivo aberto no modo leitura
     protected File outputFileHandle;                // Inditativo para o arquivo aberto no modo escrita
     public static enum tipos_perguntas
@@ -44,7 +40,6 @@ public class fdfFile
         nomeArquivo = "test.fdf";
         nomeFormulario = "formulario-teste";
         quantidade_questoes = 30;
-        
     }
     
     /**
@@ -61,8 +56,6 @@ public class fdfFile
         this.nomeArquivo = filename;
         this.nomeFormulario = nomeFormulario;
         this.quantidade_questoes = quantidade_de_questoes;
-        outBufferedReader = null;
-        inBufferedReader = null;
     }
     
     /**
@@ -70,13 +63,12 @@ public class fdfFile
      * @return
      * @throws FileNotFoundException
      */
-    public FileReader openRead() throws FileNotFoundException
+    public RandomAccessFile openRead() throws FileNotFoundException
     {
-        inputStream = new FileReader(nomeArquivo);
         inputFileHandle = new File(nomeArquivo);
-        inBufferedReader = new BufferedReader(new FileReader(inputFileHandle));
+        raf_inputStream = new RandomAccessFile(inputFileHandle, "r");
         
-        return inputStream;
+        return raf_inputStream;
     }
     
     /**
@@ -86,13 +78,11 @@ public class fdfFile
      * @return
      * @throws FileNotFoundException
      */
-    public FileReader openRead(String filenameString) throws FileNotFoundException
+    public RandomAccessFile openRead(String filenameString) throws FileNotFoundException
     {
-        inputStream = new FileReader(filenameString);
-        inputFileHandle = new File(nomeArquivo);
-        inBufferedReader = new BufferedReader(new FileReader(inputFileHandle));
-        
-        return inputStream;
+        raf_inputStream = new RandomAccessFile(filenameString, "r");
+        inputFileHandle = new File(nomeArquivo);        
+        return raf_inputStream;
     }
     
     private void writeHeader() throws IOException
@@ -101,8 +91,7 @@ public class fdfFile
         
         String fdf_header = fdf.buildHeader();
         
-        outputStream.write(fdf_header);
-        outputStream.flush();
+        raf_outputStream.writeBytes(fdf_header);
     }
     
     /**
@@ -111,16 +100,18 @@ public class fdfFile
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public FileWriter openWrite() throws FileNotFoundException, IOException
+    public RandomAccessFile openWrite() throws FileNotFoundException, IOException
     {
-        outputStream = new FileWriter(nomeArquivo);
+        raf_outputStream = new RandomAccessFile(nomeArquivo, "rws");
         outputFileHandle = new File(nomeArquivo);
-        outBufferedReader = new BufferedReader(new FileReader(outputFileHandle));
+        
+        // Força todos os dados no arquivo a serem gravados imediatamente
+        raf_outputStream.getChannel().force(true);
         
         // Escreve o cabeçalho no arquivo
         writeHeader();
         
-        return outputStream;
+        return raf_outputStream;
     }
     
     /**
@@ -131,16 +122,17 @@ public class fdfFile
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public FileWriter openWrite(String fileString) throws FileNotFoundException, IOException
+    protected RandomAccessFile openWrite(String fileString) throws FileNotFoundException, IOException
     {
-        outputStream = new FileWriter(fileString);
+        raf_outputStream = new RandomAccessFile(fileString, "rws");
         outputFileHandle = new File(nomeArquivo);
-        outBufferedReader = new BufferedReader(new FileReader(outputFileHandle));
+        
+        raf_outputStream.getChannel().force(true);
         
         // Escreve o cabeçalho no arquivo
         writeHeader();
         
-        return outputStream;
+        return raf_outputStream;
     }
         
     /**
@@ -152,46 +144,45 @@ public class fdfFile
      * @return
      * @throws FileNotFoundException
      */
-    public FileWriter openWrite(String fileString, boolean append) throws FileNotFoundException, IOException
+    protected RandomAccessFile openWrite(String fileString, boolean append) throws FileNotFoundException, IOException
     {
-        outputStream = new FileWriter(fileString, append);
-        outBufferedReader = new BufferedReader(new FileReader(outputFileHandle));
+        raf_outputStream = new RandomAccessFile(fileString, "rws");
+        raf_outputStream.getChannel().force(true);
         
-        // Escreve o cabeçalho no arquivo
-        writeHeader();
+        // Se o arquivo já existe, então supõe-se que não é necessário escrever o cabeçalho nele novamente
         
-        return outputStream;
+        return raf_outputStream;
     }
         
     /**
      *  Fecha um arquivo anteriormente aberto no modo escrita
      * @throws IOException
      */
-    public void closeWrite() throws IOException
+    protected void closeWrite() throws IOException
     {
-        outputStream.close();
+        raf_outputStream.close();
     }
     
     /**
      *  Fecha um arquivo anteriormente aberto no modo leitura
      * @throws IOException
      */
-    public void closeRead() throws IOException
+    protected void closeRead() throws IOException
     {
-        inputStream.close();
+        raf_inputStream.close();
     }
     
     /**
      *  Fecha todos os arquivos abertos pela instância dessa classe
      * @throws IOException
      */
-    public void closeAll() throws IOException
+    protected void closeAll() throws IOException
     {
-        outputStream.close();
-        inputStream.close();
+        raf_outputStream.close();
+        raf_inputStream.close();
     }
     
-    public boolean isOpenRead()
+    protected boolean isOpenRead()
     {
         // TODO: implementar
         return false;
@@ -202,7 +193,7 @@ public class fdfFile
      * @return
      * Falso caso o arquivo não esteja aberto
      */
-    public boolean isOpenWrite()
+    protected boolean isOpenWrite()
     {
         // TODO: implementar
         return false;
@@ -214,7 +205,7 @@ public class fdfFile
      * Nome do arquivo a ser verificado quanto à sua validade.
      * @return
      */
-    public boolean isValid(String fileName)
+    public static boolean isValid(String fileName)
     {        
         // TODO: Implementar
         return false;
@@ -224,7 +215,7 @@ public class fdfFile
      *  Obtém a localização em disco do arquivo aberto no modo escrita
      * @return
      */
-    public String getInputFileLocation()
+    protected String getInputFileLocation()
     {
         return inputFileHandle.getPath();
     }
@@ -233,7 +224,7 @@ public class fdfFile
      *  Obtém a localização em disco do arquivo aberto no modo leitura
      * @return
      */
-    public String getOutputFileLocation()
+    protected String getOutputFileLocation()
     {
         return outputFileHandle.getPath();
     }

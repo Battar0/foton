@@ -14,10 +14,16 @@
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>aberto</word>
             <word>arquivo</word>
+            <word>compõem</word>
+            <word>formulário</word>
             <word>leitura</word>
             <word>localização</word>
             <word>modo</word>
             <word>Obtém</word>
+            <word>Quantidade</word>
+            <word>que</word>
+            <word>questoes</word>
+            <word>questões</word>
         </spellchecker-wordlist>
     </configuration>
 </project>
