@@ -19,7 +19,7 @@ public class Formulario
     private String dataInicio;
     private String dataTermino;
     private String nomeAutor;
-    public ArrayList<Pergunta> questoes;
+    private ArrayList<Pergunta> questoes;
     
     public Formulario(String nome, String descricao, String nomeAutor){
         this.nome = nome;
@@ -27,6 +27,22 @@ public class Formulario
         this.nomeAutor = nomeAutor;
         
         questoes = new ArrayList<>();
+    }
+    
+    public void add(Pergunta pergunta){
+        questoes.add(pergunta);
+    }
+    
+    public void rmv(Pergunta pergunta){
+        questoes.remove(pergunta);
+    }
+    
+    public int questoesSize(){
+        return questoes.size();
+    }
+    
+    public Pergunta get(int x){
+        return questoes.get(x);
     }
     
     public String getNome() {

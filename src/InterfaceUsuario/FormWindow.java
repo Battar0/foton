@@ -6,10 +6,9 @@
 package InterfaceUsuario;
 
 import regrasNegocio.*;
-import java.util.*;
 import Excecoes.*;
-import java.text.SimpleDateFormat;
-import java.time.LocalTime;
+import FDF.fdfFile;
+import FDF.fdfWriter;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -378,6 +377,21 @@ public class FormWindow extends javax.swing.JFrame {
                 mwd.lista.add(formulario);
                 mwd.atualizar();
                 
+                //-------------------------------------------------------<WOP>---------------------------------------------------------------------------------
+                fdfWriter wrt = new fdfWriter(nome_formulario.toString());
+                //wrt.writePergunta(titulo_pergunta, fdfFile.tipos_perguntas.LIVRE, HEIGHT, alternativas);
+                
+                String[] hihi = null;
+                
+                try{
+                for(int count = 0; count < formulario.questoesSize(); count++)
+                    wrt.writePergunta(formulario.get(count).getTexto(), fdfFile.tipos_perguntas.LIVRE, HEIGHT, hihi);
+                
+                }catch(Exception e){
+                }
+                
+                //-------------------------------------------------------</WOP>--------------------------------------------------------------------------------
+                
                 dispose();
             }
         }
@@ -411,12 +425,12 @@ public class FormWindow extends javax.swing.JFrame {
                 throw new PerguntaInexistenteException();
             
             else{
-                pergunta = formulario.questoes.get(perguntas.getSelectedIndex());
+                pergunta = formulario.get(perguntas.getSelectedIndex());
 
                 QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta.getTexto(), null);
                 modificarPergunta.setVisible(true);
 
-                formulario.questoes.remove(pergunta);
+                formulario.rmv(pergunta);
                 atualizar();
             }
         }
@@ -434,7 +448,7 @@ public class FormWindow extends javax.swing.JFrame {
                 throw new PerguntaInexistenteException();
             
             else{
-                formulario.questoes.remove(perguntas.getSelectedIndex());
+                formulario.rmv(formulario.get(perguntas.getSelectedIndex()));
                 atualizar(); 
             }
         }
@@ -496,8 +510,8 @@ public class FormWindow extends javax.swing.JFrame {
         taPerguntas.setText("");
         perguntas.removeAllItems();
         
-        for(int count = 0; count < formulario.questoes.size(); count++)
-            addTaPerguntas(formulario.questoes.get(count).getTexto());
+        for(int count = 0; count < formulario.questoesSize(); count++)
+            addTaPerguntas(formulario.get(count).getTexto());
     }
     
 
