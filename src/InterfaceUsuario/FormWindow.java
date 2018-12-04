@@ -7,6 +7,9 @@ package InterfaceUsuario;
 
 import regrasNegocio.*;
 import java.util.*;
+import Excecoes.*;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,16 +18,19 @@ import java.util.*;
 public class FormWindow extends javax.swing.JFrame {
     Formulario formulario;
     List<Pergunta> lista;
+    MainWindow mwd;
     /**
      * Creates new form NewJFrame
      */
-    public FormWindow() {
+    public FormWindow(MainWindow mwindow) {
         initComponents();
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
         lista = new ArrayList<Pergunta>();
 
         this.setLocationRelativeTo(null);
+        
+        mwd = mwindow;
     }
     
     /**
@@ -78,6 +84,12 @@ public class FormWindow extends javax.swing.JFrame {
             }
         });
         nome_formulario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nome_formularioKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                nome_formularioKeyReleased(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 nome_formularioKeyTyped(evt);
             }
@@ -305,7 +317,7 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_nome_formularioInputMethodTextChanged
 
     private void nome_formularioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_formularioKeyTyped
-        formulario.setNome(nome_autor.getText());
+        
     }//GEN-LAST:event_nome_formularioKeyTyped
 
     private void bSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSairActionPerformed
@@ -313,10 +325,23 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bSairActionPerformed
 
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
-        // Salva o formulario
-        // [...]
+        try{
+            if (nome_autor.getText().isEmpty() || nome_formulario.getText().isEmpty() || descricao.getText().isEmpty()) // adcionar data na verificação
+                throw new DescricaoObrigatoriaNaoInformadaException();
+            
+            else{
+                mwd.lista.add(formulario);
+                mwd.atualizar();
+                
+                dispose();
+            }
+        }
         
-        dispose();
+        catch (DescricaoObrigatoriaNaoInformadaException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_bSalvarActionPerformed
 
     private void nome_autorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_autorKeyTyped
@@ -346,26 +371,42 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bModificarPerguntaActionPerformed
 
     private void bDeletarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeletarPerguntaActionPerformed
-        int selection = perguntas.getSelectedIndex();
-        String[] text = taPerguntas.getText().split("\n");
-        StringBuilder textBuilder = new StringBuilder();
-        for(int i = 0; i < text.length; i++){
-            if(i != selection){
-                textBuilder.append(text[i]);
-                if(i < text.length-1) {
-                    textBuilder.append("\n");
-                }
+        try{
+            if(perguntas.getItemCount() == 0)
+                throw new PerguntaInexistenteException();
+            
+            else{
+                lista.remove(perguntas.getSelectedIndex());
+                atualizar(); 
             }
         }
-        taPerguntas.setText(textBuilder.toString());
-        perguntas.removeItemAt(selection);
-        lista.remove(selection);
-
+        
+        catch(PerguntaInexistenteException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_bDeletarPerguntaActionPerformed
+
+    private void nome_formularioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_formularioKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nome_formularioKeyPressed
+
+    private void nome_formularioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_formularioKeyReleased
+        formulario.setNome(nome_formulario.getText());
+    }//GEN-LAST:event_nome_formularioKeyReleased
 
     void addTaPerguntas(String str){
         taPerguntas.append("#" + taPerguntas.getLineCount() + " "+ str + '\n');
         perguntas.addItem("Pergunta #" + (perguntas.getItemCount() + 1));
+    }
+    
+    private void atualizar(){
+        taPerguntas.setText("");
+        perguntas.removeAllItems();
+        
+        for(int count = 0; count < lista.size(); count++)
+            addTaPerguntas(lista.get(count).getTexto());
     }
     
 
