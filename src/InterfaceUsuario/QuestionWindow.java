@@ -10,24 +10,40 @@ import Excecoes.*;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-
 public class QuestionWindow extends javax.swing.JFrame {
-    Pergunta pergunta;
     FormWindow formPai;
+    
     /**
      * Creates new form QuestionWindow
      */
-    public QuestionWindow(Pergunta novaPergunta, FormWindow form) {
+    public QuestionWindow(FormWindow form) {
         initComponents();
+        defineConfig();
         
+        formPai = form;   
+    }
+    
+    public QuestionWindow(FormWindow form, String enunciado, String[] alternativas){
+        initComponents();
+        defineConfig();
+        
+        formPai = form;  
+        this.enunciado.setText(enunciado);
+        
+        if (alternativas == null)
+            cbAlternativas.getItemAt(1);
+        
+        for(int count = 0; count < alternativas.length; count++)
+            taAlternativas.append(alternativas[count]);
+    }
+    
+    private void defineConfig(){
+        // Define os tipos de pergunta
         cbAlternativas.addItem("Aberta");
         cbAlternativas.addItem("Lista");
         cbAlternativas.addItem("Alternativa");
         cbAlternativas.addItem("Exclusiva");
         cbAlternativas.addItem("Opcional");
-        
-        formPai = form;
-        pergunta = novaPergunta;
     }
 
     /**
@@ -142,31 +158,49 @@ public class QuestionWindow extends javax.swing.JFrame {
    
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
         try{
+            // Verifica se existe enunciado
             if(enunciado.getText().isEmpty())
                 throw new EnunciadoNaoInformadoException();
 
             else{
-                if (cbAlternativas.getSelectedItem().toString() == "Aberta")
-                    pergunta = new PerguntaAberta(enunciado.getText());
+                if (cbAlternativas.getSelectedItem().toString() == "Aberta"){
+                    // Cria a pergunta e adciona a lista
+                    PerguntaAberta pergunta = new PerguntaAberta(enunciado.getText());
+                    
+                    formPai.lista.add(pergunta);
+                    formPai.addTaPerguntas(pergunta.getTexto());
+                }
             
-
                 else{
+                    // Recebe as alternativas inseridas 
                     String saux = new String();
                     saux = taAlternativas.getText();
-
+                    
+                    // Verifica se existe alternativas
+                    if(saux.isEmpty())
+                        throw new AlternativasNaoInformadasException();
+                    
+                    // Separa as alternativas por '\n'
                     String[] str = saux.split("\n");
-
-                    pergunta = new PerguntaFechada(enunciado.getText(), str);
+                    
+                    // Cria a pergunta e adciona a lista
+                    PerguntaFechada pergunta = new PerguntaFechada(enunciado.getText(), str);
+                    
+                    formPai.lista.add(pergunta);
+                    formPai.addTaPerguntas(pergunta.getTexto());
                 }
-
-                formPai.addTaPerguntas(enunciado.getText());
-                formPai.lista.add(pergunta);
-
+                
                 dispose();
             }
         }
-            
+        
         catch (EnunciadoNaoInformadoException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
+        }
+        
+        catch (AlternativasNaoInformadasException e){
             JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
             JDialog dialog = optionPane.createDialog("Error");
             dialog.setVisible(true);
@@ -175,13 +209,16 @@ public class QuestionWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bSalvarActionPerformed
 
     private void cbAlternativasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlternativasActionPerformed
+        // Desabilita a edição da alternativas se for pergunta aberta ou opcional (s/n)
         if ((cbAlternativas.getSelectedItem().toString() == "Aberta") || (cbAlternativas.getSelectedItem().toString() == "Opcional")){
             taAlternativas.setEnabled(false);
             
+            // Seta as alternativas para o tipo Opcional
             if (cbAlternativas.getSelectedItem().toString() == "Opcional")
                 taAlternativas.setText("Sim\nNão");
         }
         
+        // Habilita a edição das alternativas
         else
             taAlternativas.setEnabled(true);
     }//GEN-LAST:event_cbAlternativasActionPerformed

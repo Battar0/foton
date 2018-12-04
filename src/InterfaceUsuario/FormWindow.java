@@ -49,6 +49,7 @@ public class FormWindow extends javax.swing.JFrame {
         bDeletarPergunta = new javax.swing.JButton();
         bModificarPergunta = new javax.swing.JButton();
         bNovaPergunta = new javax.swing.JButton();
+        perguntas = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         descricao = new javax.swing.JTextArea();
@@ -147,7 +148,10 @@ public class FormWindow extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 294, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(perguntas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -163,7 +167,10 @@ public class FormWindow extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 158, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(perguntas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(39, 39, 39))
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addContainerGap()
@@ -262,7 +269,7 @@ public class FormWindow extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 25, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -304,7 +311,10 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bSairActionPerformed
 
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
-        System.out.println("Recurso indisponível no momento :c");
+        // Salva o formulario
+        // [...]
+        
+        dispose();
     }//GEN-LAST:event_bSalvarActionPerformed
 
     private void nome_autorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_autorKeyTyped
@@ -316,14 +326,21 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_descricaoKeyTyped
 
     private void bNovaPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNovaPerguntaActionPerformed
-        Pergunta novaPergunta = null;
-        
-        QuestionWindow jNovaPergunta = new QuestionWindow(novaPergunta, this);
+        QuestionWindow jNovaPergunta = new QuestionWindow(this);
         jNovaPergunta.setVisible(true);
     }//GEN-LAST:event_bNovaPerguntaActionPerformed
 
     private void bModificarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bModificarPerguntaActionPerformed
-        System.out.println("Recurso indisponível no momento :c");
+        //WoP
+        
+        Pergunta pergunta = null;
+        
+        System.out.println(perguntas.getSelectedIndex() + " - " + lista.get(0).getTexto());
+        pergunta = lista.get(perguntas.getSelectedIndex());
+        
+        QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta.getTexto(), null);
+        modificarPergunta.setVisible(true);
+        
     }//GEN-LAST:event_bModificarPerguntaActionPerformed
 
     private void bDeletarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeletarPerguntaActionPerformed
@@ -331,7 +348,8 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bDeletarPerguntaActionPerformed
 
     void addTaPerguntas(String str){
-        taPerguntas.append(str + '\n');
+        taPerguntas.append("#" + taPerguntas.getLineCount() + " "+ str + '\n');
+        perguntas.addItem("Pergunta #" + (perguntas.getItemCount() + 1));
     }
     
 
@@ -357,6 +375,7 @@ public class FormWindow extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nome_autor;
     private javax.swing.JTextField nome_formulario;
+    private javax.swing.JComboBox<String> perguntas;
     private javax.swing.JTextArea taPerguntas;
     // End of variables declaration//GEN-END:variables
 }
