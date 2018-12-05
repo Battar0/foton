@@ -5,18 +5,34 @@
  */
 package InterfaceUsuario;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import regrasNegocio.Formulario;
+import regrasNegocio.Pergunta;
+import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaAlternativa;
+import regrasNegocio.PerguntaLista;
+import regrasNegocio.PerguntaOpcional;
+
 /**
  *
  * @author Windows 10
  */
 public class ResponderAberta extends javax.swing.JFrame {
+    Formulario form;
+    int proxPergunta;
 
     /**
      * Creates new form ResponderAberta
      */
-    public ResponderAberta() {
+    public ResponderAberta(Formulario formR, int index) {
         initComponents();
+        this.setLocationRelativeTo(null);
         
+        form = formR;
+        proxPergunta = index + 1;
+        
+        taEnunciado.setText(formR.get(index).getTexto());
     }
 
     /**
@@ -49,6 +65,11 @@ public class ResponderAberta extends javax.swing.JFrame {
         bVoltar.setText("Voltar");
 
         bAvançar.setText("Avançar");
+        bAvançar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAvançarActionPerformed(evt);
+            }
+        });
 
         taResposta.setColumns(20);
         taResposta.setRows(5);
@@ -85,6 +106,26 @@ public class ResponderAberta extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
+        String aux = taResposta.toString();
+        
+        String[] resposta = new String[1];
+        resposta[0] = aux;
+        
+        form.perguntas.get(proxPergunta - 1).setRespostas(resposta);
+        
+        dispose();
+        
+        if(proxPergunta < form.perguntasSize())
+            MainWindow.responderPergunta(form, proxPergunta);
+        
+        else{
+            JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
+            JDialog dialog = optionPane.createDialog("");
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_bAvançarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAvançar;

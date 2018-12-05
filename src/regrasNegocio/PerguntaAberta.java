@@ -15,6 +15,8 @@ public class PerguntaAberta extends Pergunta {
     public PerguntaAberta(String texto){
         super(texto);
     }
+    
+    //
 
     /**
      * Seta as respostas da pergunta de forma padrão

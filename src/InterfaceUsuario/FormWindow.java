@@ -24,6 +24,8 @@ public class FormWindow extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
+    
+    // Recebe o MainWindow para poder adcionar / remover formularios da lista de formularios
     public FormWindow(MainWindow mwindow) 
     {
         initComponents();
@@ -390,13 +392,23 @@ public class FormWindow extends javax.swing.JFrame {
                 throw new DescricaoObrigatoriaNaoInformadaException();
             } 
             else 
-            {
-                mwd.lista.add(formulario);
-                mwd.atualizar();
-
+            {   
+                // Salva os nomes do formulario e autor
+                formulario.setNome(nome_formulario.getText());
+                formulario.setNomeAutor(nome_autor.getText());
+                
+                // Salva a descrição do formulario
+                formulario.setDescricao(descricao.getText());
+                        
                 // Salva as datas de início e de término na memória
                 formulario.setDataInicio(dataInicio.getText());
                 formulario.setDataTermino(dataTermino.getText());
+                
+                // Adciona o formulario a lista de formularios
+                mwd.lista.add(formulario);
+                
+                // Atualizar a janela principal
+                mwd.atualizar();
                 
                 // Grava todos os dados em disco
                 Instant agora = Instant.now();
@@ -539,6 +551,7 @@ public class FormWindow extends javax.swing.JFrame {
                 ano_atual = Calendar.getInstance().get(Calendar.YEAR);
                 
                 System.out.println("Data atual: " + dia_atual + "/" + mes_atual + "/" + ano_atual);
+                
                 if(ano < ano_atual || (ano == ano_atual && mes < mes_atual) || (ano == ano_atual && dia < dia_atual))
                 {
                     JOptionPane.showMessageDialog(mwd, "Data de início inválida: não é possível configurar o formulário para começar a ser respondido no passado", "Erro", JOptionPane.ERROR_MESSAGE);

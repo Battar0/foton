@@ -5,18 +5,33 @@
  */
 package InterfaceUsuario;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import regrasNegocio.Formulario;
+import regrasNegocio.Pergunta;
+import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaAlternativa;
+import regrasNegocio.PerguntaLista;
+import regrasNegocio.PerguntaOpcional;
+
 /**
  *
  * @author Windows 10
  */
 public class ResponderLista extends javax.swing.JFrame {
-
+    Formulario form;
+    int proxPergunta;
     /**
      * Creates new form ResponderAberta
      */
-    public ResponderLista() {
+    public ResponderLista(Formulario formR, int index) {
         initComponents();
+        this.setLocationRelativeTo(null);
         
+        form = formR;
+        proxPergunta = index + 1;
+        
+        taEnunciado.setText(formR.get(index).getTexto());
     }
 
     /**
@@ -33,7 +48,7 @@ public class ResponderLista extends javax.swing.JFrame {
         bVoltar = new javax.swing.JButton();
         bAvançar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jLista = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Fóton - Responder Formulário");
@@ -49,10 +64,15 @@ public class ResponderLista extends javax.swing.JFrame {
         bVoltar.setText("Voltar");
 
         bAvançar.setText("Avançar");
+        bAvançar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAvançarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Escolha uma alternativa :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLista.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -69,7 +89,7 @@ public class ResponderLista extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLista, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -80,7 +100,7 @@ public class ResponderLista extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bVoltar)
@@ -91,11 +111,31 @@ public class ResponderLista extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
+        String aux = jLista.getSelectedItem().toString();
+        String[] resposta = new String[1];
+        
+        resposta[0] = aux;
+        
+        form.perguntas.get(proxPergunta - 1).setRespostas(resposta);
+        
+        dispose();
+        
+        if(proxPergunta < form.perguntasSize())
+            MainWindow.responderPergunta(form, proxPergunta);
+        
+        else{
+            JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
+            JDialog dialog = optionPane.createDialog("");
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_bAvançarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAvançar;
     private javax.swing.JButton bVoltar;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JComboBox<String> jLista;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea taEnunciado;
     // End of variables declaration//GEN-END:variables

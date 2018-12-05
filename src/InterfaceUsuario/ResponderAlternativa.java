@@ -5,18 +5,34 @@
  */
 package InterfaceUsuario;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import regrasNegocio.Formulario;
+import regrasNegocio.Pergunta;
+import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaAlternativa;
+import regrasNegocio.PerguntaLista;
+import regrasNegocio.PerguntaOpcional;
+
 /**
  *
  * @author Windows 10
  */
 public class ResponderAlternativa extends javax.swing.JFrame {
-
+    Formulario form;
+    int proxPergunta;
+    
     /**
      * Creates new form ResponderAberta
      */
-    public ResponderAlternativa() {
+    public ResponderAlternativa(Formulario formR, int index) {
         initComponents();
+        this.setLocationRelativeTo(null);
         
+        form = formR;
+        proxPergunta = index + 1;
+        
+        taEnunciado.setText(formR.get(index).getTexto());
     }
 
     /**
@@ -33,7 +49,7 @@ public class ResponderAlternativa extends javax.swing.JFrame {
         bVoltar = new javax.swing.JButton();
         bAvançar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jLista = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -50,13 +66,18 @@ public class ResponderAlternativa extends javax.swing.JFrame {
         bVoltar.setText("Voltar");
 
         bAvançar.setText("Avançar");
+        bAvançar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bAvançarActionPerformed(evt);
+            }
+        });
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        jLista.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jLista);
 
         jLabel1.setText("Escolha uma ou mais alternativas (segure ctrl para multipla escolha) :");
 
@@ -97,11 +118,32 @@ public class ResponderAlternativa extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
+        //int totalSelecionados = jLista.getSelectedIndices().length;
+        //String[] resposta = new String[totalSelecionados];
+        
+        String aux = jLista.getSelectedValuesList().toString();
+        String[] resposta = aux.split("\n");
+        
+        form.perguntas.get(proxPergunta - 1).setRespostas(resposta);
+        
+        dispose();
+        
+        if(proxPergunta < form.perguntasSize())
+            MainWindow.responderPergunta(form, proxPergunta);
+        
+        else{
+            JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
+            JDialog dialog = optionPane.createDialog("");
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_bAvançarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAvançar;
     private javax.swing.JButton bVoltar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jLista;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea taEnunciado;

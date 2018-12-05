@@ -10,12 +10,10 @@ import FDF.fdfFile.tipos_perguntas;
 import FDF.fdfWriter;
 import java.io.File;
 import java.io.IOException;
-import regrasNegocio.Formulario;
 import java.util.*;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import regrasNegocio.Pergunta;
-import regrasNegocio.PerguntaExclusiva;
+import regrasNegocio.*;
 
 /**
  *
@@ -198,37 +196,50 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bCriarActionPerformed
     
     private void bResponderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResponderActionPerformed
-        Pergunta pergunta = this.lista.get(cbFormularios.getSelectedIndex()).perguntas.get(0);
-        
-        // COMO IREI DIFERENCIAR AS PERGUNTAS AQUI?
-        
-        /*
-        switch(pergunta.)
-        {
-            case EXCLUSIVA:
-            case LISTA:
-                ResponderLista resp_lista = new ResponderLista();
-                resp_lista.setVisible(true);
-                break;
-                
-            case LIVRE:
-                ResponderAberta resp_aberta = new ResponderAberta();
-                resp_aberta.setVisible(true);
-                break;
-                
-            case ALTERNATIVA:
-                ResponderAlternativa resp_alternativa = new ResponderAlternativa();
-                resp_alternativa.setVisible(true);
-                break;
-                
-            case OPCIONAL:
-                ResponderOpcional resp_opcional = new ResponderOpcional();
-                resp_opcional.setVisible(true);
-                break;
+        try{
+            if(cbFormularios.getItemCount() == 0)
+                throw new FormularioInexistenteException();
+            
+            // Começa a respondero formulario recebido
+            Formulario formR = lista.get(cbFormularios.getSelectedIndex());
+            MainWindow.responderPergunta(formR, 0);
         }
-        */
+        
+        catch(FormularioInexistenteException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
+        }
+        
+        
     }//GEN-LAST:event_bResponderActionPerformed
 
+    
+    // Abre a janela especifica para pergunta a ser respondida
+    public static void responderPergunta(Formulario form, int proxPergunta){
+        
+        if (form.perguntas.get(proxPergunta) instanceof PerguntaLista){
+            ResponderLista resp_lista = new ResponderLista(form, proxPergunta);
+            resp_lista.setVisible(true);
+        }
+
+        else if (form.perguntas.get(proxPergunta) instanceof PerguntaAberta){
+            ResponderAberta resp_aberta = new ResponderAberta(form, proxPergunta);
+            resp_aberta.setVisible(true);
+        }
+
+        else if (form.perguntas.get(proxPergunta) instanceof PerguntaAlternativa){
+            ResponderAlternativa resp_alternativa = new ResponderAlternativa(form, proxPergunta);
+            resp_alternativa.setVisible(true);
+        }
+
+        else if (form.perguntas.get(proxPergunta) instanceof PerguntaOpcional){
+            ResponderOpcional resp_opcional = new ResponderOpcional(form, proxPergunta);
+            resp_opcional.setVisible(true);
+        }
+   
+    }
+    
     private void bApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApagarActionPerformed
         try{
             if(cbFormularios.getItemCount() == 0)

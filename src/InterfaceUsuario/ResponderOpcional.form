@@ -98,6 +98,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Avan&#xe7;ar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bAvan&#xe7;arActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="bSim">
       <Properties>

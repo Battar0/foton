@@ -16,7 +16,7 @@ public class QuestionWindow extends javax.swing.JFrame
     FormWindow formPai;
     private final String[] tipos_perguntas_strings = 
     {
-        "livre",
+        "aberta",
         "lista",
         "alternativa",
         "exclusiva",
@@ -251,6 +251,8 @@ public class QuestionWindow extends javax.swing.JFrame
         if ((cbAlternativas.getSelectedItem().toString().toLowerCase().equals("aberta")) || 
                 (cbAlternativas.getSelectedItem().toString().toLowerCase().equals("opcional"))){
             taAlternativas.setEnabled(false);
+            
+            taAlternativas.setText("");
             
             // Seta as alternativas para o tipo Opcional
             if (cbAlternativas.getSelectedItem().toString().toLowerCase().equals("opcional"))
