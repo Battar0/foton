@@ -22,11 +22,11 @@ public class FormWindow extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    public FormWindow(MainWindow mwindow) {
+    public FormWindow(MainWindow mwindow) 
+    {
         initComponents();
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
-
         this.setLocationRelativeTo(null);
         
         mwd = mwindow;
@@ -369,34 +369,27 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bSairActionPerformed
 
     private void bSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSalvarActionPerformed
-        try{
-            if (nome_autor.getText().isEmpty() || nome_formulario.getText().isEmpty() || descricao.getText().isEmpty() || dataInicio.getText().isEmpty() || dataTermino.getText().isEmpty()) // adcionar data na verificação
+        try 
+        {
+            // adcionar data na verificação
+            if (nome_autor.getText().isEmpty() || 
+                nome_formulario.getText().isEmpty() || 
+                descricao.getText().isEmpty() || 
+                dataInicio.getText().isEmpty() || 
+                dataTermino.getText().isEmpty())
+            {
                 throw new DescricaoObrigatoriaNaoInformadaException();
-            
-            else{
+            } 
+            else 
+            {
                 mwd.lista.add(formulario);
                 mwd.atualizar();
-                
-                //-------------------------------------------------------<WOP>---------------------------------------------------------------------------------
-                fdfWriter wrt = new fdfWriter(nome_formulario.toString());
-                //wrt.writePergunta(titulo_pergunta, fdfFile.tipos_perguntas.LIVRE, HEIGHT, alternativas);
 
+                // Salva as datas de início e de término na memória
+                formulario.setDataInicio(dataInicio.getText());
+                formulario.setDataTermino(dataTermino.getText());
                 
-                String hihi = new String();
-                hihi = "algumacoisa outracoisa";
-                
-                String[] hoho = hihi.split(" ");
-                
-                
-                try{
-                    for(int count = 0; count < formulario.questoesSize(); count++)
-                        wrt.writePergunta(formulario.get(count).getTexto(), fdfFile.tipos_perguntas.LIVRE, count, hoho);
-                
-                }catch(Exception e){
-                    System.out.println(formulario.get(0).getTexto());
-                }
-                
-                //-------------------------------------------------------</WOP>--------------------------------------------------------------------------------
+                // Grava todos os dados em disco
                 
                 dispose();
             }
@@ -471,15 +464,15 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_nome_formularioKeyPressed
 
     private void nome_formularioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_formularioKeyReleased
-        formulario.setNome(nome_formulario.getText());
+        
     }//GEN-LAST:event_nome_formularioKeyReleased
 
     private void nome_autorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nome_autorKeyReleased
-        formulario.setNomeAutor(nome_autor.getText());
+        
     }//GEN-LAST:event_nome_autorKeyReleased
 
     private void descricaoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descricaoKeyReleased
-        formulario.setDescricao(descricao.getText());
+        
     }//GEN-LAST:event_descricaoKeyReleased
 
     private void dataInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataInicioActionPerformed

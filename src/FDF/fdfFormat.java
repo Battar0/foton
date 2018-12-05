@@ -59,7 +59,7 @@ public class fdfFormat extends fdfFile
      *  Cria o cabeçalho do arquivo
      * @return
      */
-    public String buildHeader()
+    protected String buildHeader()
     {
         String str_header_data;
         ByteBuffer headerData;

@@ -31,6 +31,14 @@ public class fdfFile
     {
         LIVRE, LISTA, ALTERNATIVA, EXCLUSIVA, OPCIONAL
     };
+    public static final String tipos_perguntas_str[] =
+    {
+        "LIVRE",
+        "LISTA",
+        "ALTERNATIVA",
+        "EXCLUSIVA",
+        "OPCIONAL"
+    };
 
     /**
      *  Não utilize este construtor, exceto para fins de teste
@@ -42,6 +50,30 @@ public class fdfFile
         quantidade_questoes = 30;
     }
     
+    /**
+     *
+     * @param tp
+     * Tipo da pergunta
+     * @return
+     */
+    protected final String get_tipo_str(tipos_perguntas tp)
+    {
+        switch (tp) 
+        {
+            case LIVRE:
+                return tipos_perguntas_str[0];
+            case LISTA:
+                return tipos_perguntas_str[1];
+            case ALTERNATIVA:
+                return tipos_perguntas_str[2];
+            case EXCLUSIVA:
+                return tipos_perguntas_str[3];
+            case OPCIONAL:
+                return tipos_perguntas_str[4];
+            default:
+                return "";
+        }
+    }
     /**
      *
      * @param filename

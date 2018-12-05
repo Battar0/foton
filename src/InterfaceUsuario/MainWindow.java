@@ -6,8 +6,9 @@
 package InterfaceUsuario;
 
 import Excecoes.FormularioInexistenteException;
-import FDF.fdfFile;
+import FDF.fdfFile.tipos_perguntas;
 import FDF.fdfWriter;
+import java.io.File;
 import java.io.IOException;
 import regrasNegocio.Formulario;
 import java.util.*;
@@ -29,19 +30,52 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         
-        fdfWriter f = new fdfWriter("lucas.fdf");
-        String[] alternativas = {
-            "Lucas", "Virus", "Porra"
-        };
-                
-        try {
-        f.writePergunta("Titulo", fdfFile.tipos_perguntas.LIVRE, 60, alternativas);
-        } catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        
         lista = new ArrayList<Formulario>();
+        
+        // Precisamos escanear o local em busca de arquivos FDF e preencher a jComboBox com o nome desses arquivos
+        File pasta_atual = new File(".");
+        File[] todos_arquivos;
+        String nome_arquivo;
+        String extensao;
+        int posicao_ponto;
+        int tamanho_substring;
+        int quantidade_formularios = 0;
+        
+        System.out.println( "Pasta atual: " + pasta_atual.getAbsolutePath());
+        
+        todos_arquivos = pasta_atual.listFiles();
+
+        try {
+            for(File arquivo : todos_arquivos)
+            {
+                if(arquivo.isDirectory() || !arquivo.isFile())
+                    continue;
+
+                nome_arquivo = arquivo.getName();
+
+                System.out.println(nome_arquivo);
+
+                posicao_ponto = nome_arquivo.lastIndexOf(".");
+                if(posicao_ponto == -1)
+                    continue;
+
+                tamanho_substring = nome_arquivo.length();
+                extensao = nome_arquivo.substring(posicao_ponto + 1, tamanho_substring);
+                if(extensao.toLowerCase().equals("fdf"))
+                {
+                    // Então o arquivo é um formulário do fóton
+                    cbFormularios.addItem(nome_arquivo);
+                    quantidade_formularios++;
+                }
+            }
+            
+            if(quantidade_formularios == 0)
+                System.out.println("Nenhum formulário encontrado");
+            
+        } catch(NullPointerException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -92,6 +126,12 @@ public class MainWindow extends javax.swing.JFrame {
         });
 
         jLabel2.setText("Formulários Disponíveis");
+
+        cbFormularios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbFormulariosActionPerformed(evt);
+            }
+        });
 
         bInfo.setText("Info");
 
@@ -158,25 +198,30 @@ public class MainWindow extends javax.swing.JFrame {
     
     private void bResponderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResponderActionPerformed
         Pergunta pergunta = this.lista.get(cbFormularios.getSelectedIndex()).questoes.get(0);
-        String _tipo = pergunta.getTipo();
+        tipos_perguntas _tipo = pergunta.getTipo();
         
-        if(_tipo == "Aberta"){
-            ResponderAberta resp = new ResponderAberta();
-            resp.setVisible(true);
-        }
-        
-        else if(_tipo == "Lista" || _tipo == "Exclusiva"){
-            ResponderLista resp = new ResponderLista();
-            resp.setVisible(true);
-        }
-        else if(_tipo == "Alternativa"){
-            ResponderAlternativa resp = new ResponderAlternativa();
-            resp.setVisible(true);
-        }
-        
-        else{
-            ResponderOpcional resp = new ResponderOpcional();
-            resp.setVisible(true);
+        switch(_tipo)
+        {
+            case EXCLUSIVA:
+            case LISTA:
+                ResponderLista resp_lista = new ResponderLista();
+                resp_lista.setVisible(true);
+                break;
+                
+            case LIVRE:
+                ResponderAberta resp_aberta = new ResponderAberta();
+                resp_aberta.setVisible(true);
+                break;
+                
+            case ALTERNATIVA:
+                ResponderAlternativa resp_alternativa = new ResponderAlternativa();
+                resp_alternativa.setVisible(true);
+                break;
+                
+            case OPCIONAL:
+                ResponderOpcional resp_opcional = new ResponderOpcional();
+                resp_opcional.setVisible(true);
+                break;
         }
     }//GEN-LAST:event_bResponderActionPerformed
 
@@ -202,6 +247,10 @@ public class MainWindow extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_bSairActionPerformed
 
+    private void cbFormulariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbFormulariosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbFormulariosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -219,13 +268,7 @@ public class MainWindow extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -233,11 +276,14 @@ public class MainWindow extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainWindow().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainWindow().setVisible(true);
         });
     }
     

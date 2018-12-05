@@ -5,11 +5,13 @@
  */
 package regrasNegocio;
 
+import FDF.fdfFile;
+import FDF.fdfWriter;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
- *
+ *  Classe que armazena todos os dados de um formulário
  * @author b2198
  */
 public class Formulario
@@ -29,10 +31,20 @@ public class Formulario
         questoes = new ArrayList<>();
     }
     
+    /**
+     *  
+     * @param pergunta
+     * Adiciona uma pergunta ao banco de questões do formulário
+     */
     public void add(Pergunta pergunta){
         questoes.add(pergunta);
     }
     
+    /**
+     *
+     * @param pergunta
+     * Remove uma pergunta ao banco de questões do formulário
+     */
     public void rmv(Pergunta pergunta){
         questoes.remove(pergunta);
     }
@@ -97,15 +109,5 @@ public class Formulario
         this.dataTermino = dataTermino;
         
         return true;
-    }
-    
-    private boolean salvar()
-    {
-        boolean ok = false;
-        
-        /* Primeiramente precisamos ler todos os dados que esão gravados nesta classe */
-        
-        return ok;
-    }
-    
+    }    
 }

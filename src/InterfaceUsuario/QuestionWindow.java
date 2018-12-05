@@ -7,12 +7,21 @@ package InterfaceUsuario;
 
 import regrasNegocio.*;
 import Excecoes.*;
+import FDF.fdfFile.tipos_perguntas;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
-public class QuestionWindow extends javax.swing.JFrame {
+public class QuestionWindow extends javax.swing.JFrame 
+{
     FormWindow formPai;
-    
+    private final String[] tipos_perguntas_strings = 
+    {
+        "Livre",
+        "Lista",
+        "Alternativa",
+        "Exclusiva",
+        "Opcional"
+    };
     /**
      * Creates new form QuestionWindow
      */
@@ -40,13 +49,11 @@ public class QuestionWindow extends javax.swing.JFrame {
                 taAlternativas.append(alternativas[count]);
     }
     
-    private void defineConfig(){
+    private void defineConfig()
+    {
         // Define os tipos de pergunta
-        cbAlternativas.addItem("Aberta");
-        cbAlternativas.addItem("Lista");
-        cbAlternativas.addItem("Alternativa");
-        cbAlternativas.addItem("Exclusiva");
-        cbAlternativas.addItem("Opcional");
+        for(String alternativa : tipos_perguntas_strings)
+            cbAlternativas.addItem(alternativa);
     }
 
     /**
@@ -165,17 +172,20 @@ public class QuestionWindow extends javax.swing.JFrame {
             if(enunciado.getText().isEmpty())
                 throw new EnunciadoNaoInformadoException();
 
-            else{
-                if (cbAlternativas.getSelectedItem().toString() == "Aberta"){
+            else
+            {
+                // Verifica se a pergunta é de resposta livre
+                if (cbAlternativas.getSelectedItem().toString().toLowerCase().equals(tipos_perguntas_strings[0]))
+                {
                     // Cria a pergunta e adciona a lista
                     PerguntaAberta pergunta = new PerguntaAberta(enunciado.getText());
-                    pergunta.setTipo(cbAlternativas.getSelectedItem().toString());
+                    pergunta.setTipo(tipos_perguntas.LIVRE);
                     
                     formPai.formulario.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
                 }
-            
-                else{
+                else
+                {
                     // Recebe as alternativas inseridas 
                     String saux = taAlternativas.getText();
                     
@@ -188,7 +198,22 @@ public class QuestionWindow extends javax.swing.JFrame {
                     
                     // Cria a pergunta e adciona a lista
                     PerguntaFechada pergunta = new PerguntaFechada(enunciado.getText(), str);
-                    pergunta.setTipo(cbAlternativas.getSelectedItem().toString());
+                    
+                    String cb_alternativas_str = cbAlternativas.getSelectedItem().toString();
+                    
+                    if(cb_alternativas_str.equals(tipos_perguntas_strings[0]))
+                        pergunta.setTipo(tipos_perguntas.LIVRE);
+                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[1]))
+                        pergunta.setTipo(tipos_perguntas.LISTA);
+                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[2]))
+                        pergunta.setTipo(tipos_perguntas.ALTERNATIVA);
+                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[3]))
+                        pergunta.setTipo(tipos_perguntas.EXCLUSIVA);
+                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[4]))
+                        pergunta.setTipo(tipos_perguntas.OPCIONAL);
+                    else {
+                        System.out.println( "Erro fatal: a combo box possui um texto que não deveria");
+                    }
                     
                     formPai.formulario.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
@@ -214,11 +239,12 @@ public class QuestionWindow extends javax.swing.JFrame {
 
     private void cbAlternativasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAlternativasActionPerformed
         // Desabilita a edição da alternativas se for pergunta aberta ou opcional (s/n)
-        if ((cbAlternativas.getSelectedItem().toString() == "Aberta") || (cbAlternativas.getSelectedItem().toString() == "Opcional")){
+        if ((cbAlternativas.getSelectedItem().toString().toLowerCase().equals("aberta")) || 
+                (cbAlternativas.getSelectedItem().toString().toLowerCase().equals("opcional"))){
             taAlternativas.setEnabled(false);
             
             // Seta as alternativas para o tipo Opcional
-            if (cbAlternativas.getSelectedItem().toString() == "Opcional")
+            if (cbAlternativas.getSelectedItem().toString().toLowerCase().equals("opcional"))
                 taAlternativas.setText("Sim\nNão");
         }
         

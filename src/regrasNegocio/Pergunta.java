@@ -5,24 +5,28 @@
  */
 package regrasNegocio;
 
+import FDF.fdfFile.tipos_perguntas;
+
 /**
  *
  * @author b2198
  */
-public abstract class Pergunta {
+public abstract class Pergunta 
+{
     private String texto;
     private String[] resposta;
-    private String tipo;
+    private tipos_perguntas tipo;
 
     public Pergunta(String texto){
         setTexto(texto);
     }
 
-    public void setTipo(String str){
-        tipo = str;
+    public void setTipo(tipos_perguntas tipo_perg){
+        tipo = tipo_perg;
     }
     
-    public String getTipo(){
+    public tipos_perguntas getTipo()
+    {
         return tipo;
     }
     
