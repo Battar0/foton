@@ -16,11 +16,11 @@ public class QuestionWindow extends javax.swing.JFrame
     FormWindow formPai;
     private final String[] tipos_perguntas_strings = 
     {
-        "Livre",
-        "Lista",
-        "Alternativa",
-        "Exclusiva",
-        "Opcional"
+        "livre",
+        "lista",
+        "alternativa",
+        "exclusiva",
+        "ppcional"
     };
     /**
      * Creates new form QuestionWindow
@@ -171,7 +171,6 @@ public class QuestionWindow extends javax.swing.JFrame
             // Verifica se existe enunciado
             if(enunciado.getText().isEmpty())
                 throw new EnunciadoNaoInformadoException();
-
             else
             {
                 // Verifica se a pergunta é de resposta livre

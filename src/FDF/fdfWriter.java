@@ -13,6 +13,8 @@ import java.io.RandomAccessFile;
 import regrasNegocio.Formulario;
 import regrasNegocio.Pergunta;
 import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaOpcaoUnica;
+import regrasNegocio.PerguntaOpcional;
 
 
 /**
@@ -52,9 +54,13 @@ public class fdfWriter extends fdfFormat
     /**
      * Salva num arquivo em disco a pergunta do formulário
      * @param titulo_pergunta
+     * Texto da pergunta
      * @param tipo
+     * Tipo da pergunta: pode ser LIVRE, LISTA, ALTERNATIVA, EXCLUSIVA ou OPCIONAL
      * @param id_pergunta
+     * Identificador da pergunta em questão - Sequência dela
      * @param alternativas
+     * Um vetor contendo todas as alternativas para a pergunta em questão. Se for do tipo livre, este parâmetro não é necessário
      * @throws IOException
      */
     public void writePergunta(String titulo_pergunta, tipos_perguntas tipo, int id_pergunta, String[] alternativas) throws IOException
@@ -240,10 +246,19 @@ public class fdfWriter extends fdfFormat
                         switch(p.getTipo())
                         {
                             case LIVRE:
+                                PerguntaAberta ab = (PerguntaAberta)p;
+                                raf_tempFile.writeBytes(ab.getResposta()[0]);
                                 break;
                                 
+                            case EXCLUSIVA:
                             case LISTA:
+                                PerguntaOpcaoUnica op = (PerguntaOpcaoUnica)p;
+                                raf_tempFile.writeBytes(op.getResposta()[0]);
+                                break;
                                 
+                            case OPCIONAL:
+                                PerguntaOpcional po = (PerguntaOpcional)p;
+                                raf_tempFile.writeBytes(po.getResposta()[0]);
                                 break;
                         }
                     }

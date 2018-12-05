@@ -11,7 +11,8 @@ import java.io.File;
 import java.io.RandomAccessFile;
 
 /**
- * Representa um arquivo FDF.
+ * Representa um arquivo FDF. Essa classe libera todos os recursos
+ * utilizados automaticamente.
  * @author Jarvis
  */
 public class fdfFile

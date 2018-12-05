@@ -11,6 +11,8 @@ import FDF.fdfFile;
 import FDF.fdfWriter;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import java.time.Instant;
+import java.util.Calendar;
 
 /**
  *
@@ -30,6 +32,7 @@ public class FormWindow extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         mwd = mwindow;
+        mwd.setVisible(false);
     }
     
     /**
@@ -70,6 +73,11 @@ public class FormWindow extends javax.swing.JFrame {
         setTitle("Fóton - Criar Formulário");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
 
         nome_formulario.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
@@ -365,6 +373,7 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_nome_formularioKeyTyped
 
     private void bSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSairActionPerformed
+        mwd.setVisible(true);
         dispose();
     }//GEN-LAST:event_bSairActionPerformed
 
@@ -390,6 +399,24 @@ public class FormWindow extends javax.swing.JFrame {
                 formulario.setDataTermino(dataTermino.getText());
                 
                 // Grava todos os dados em disco
+                Instant agora = Instant.now();
+                Calendar calendar = Calendar.getInstance();
+                int dia = calendar.get(Calendar.DAY_OF_MONTH);
+                int mes = calendar.get(Calendar.MONTH) + 1; 
+                int ano = calendar.get(Calendar.YEAR);
+                int hora = calendar.get(Calendar.HOUR);
+                int minuto = calendar.get(Calendar.MINUTE);
+                int segundo = calendar.get(Calendar.SECOND);
+                
+                fdfWriter fdf = new fdfWriter("formulario_" + dia + "_" + mes + "_" + ano + "_" + hora + "_" + minuto + "_" + segundo);
+                
+                String[] lines = taPerguntas.getText().split("\n");
+                
+                for(String line : lines) 
+                {
+                    // FIXME: é preciso encontrar uma forma de diferenciar as perguntas de cada tipo
+                    //fdf.writePergunta(line, fdfFile.tipos_perguntas.LIVRE, segundo, lines);
+                }
                 
                 dispose();
             }
@@ -488,7 +515,39 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_dataTerminoKeyReleased
 
     private void dataInicioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataInicioFocusLost
-        formulario.setDataInicio(dataInicio.getText());
+        String texto = dataInicio.getText();
+        
+        if(!texto.isEmpty())
+        {
+            // Validar a data fornecida
+            String[] data = texto.split("/");
+            
+            if(data.length != 3)
+            {
+                JOptionPane.showMessageDialog(mwd, "Data de início inválida", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else 
+            {
+                int dia, mes, ano;
+                int ano_atual, dia_atual, mes_atual;
+                
+                dia = Integer.parseInt(data[0]);
+                mes = Integer.parseInt(data[1]);
+                ano = Integer.parseInt(data[2]);
+                
+                dia_atual = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                mes_atual = Calendar.getInstance().get(Calendar.MONTH) + 1;
+                ano_atual = Calendar.getInstance().get(Calendar.YEAR);
+                
+                System.out.println("Data atual: " + dia_atual + "/" + mes_atual + "/" + ano_atual);
+                if(ano < ano_atual || (ano == ano_atual && mes < mes_atual) || (ano == ano_atual && dia < dia_atual))
+                {
+                    JOptionPane.showMessageDialog(mwd, "Data de início inválida: não é possível configurar o formulário para começar a ser respondido no passado", "Erro", JOptionPane.ERROR_MESSAGE);
+                    dataInicio.setText("");
+                } else {
+                    formulario.setDataInicio(texto);
+                }
+            }
+        }
     }//GEN-LAST:event_dataInicioFocusLost
 
     private void dataTerminoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataTerminoFocusLost
@@ -497,8 +556,15 @@ public class FormWindow extends javax.swing.JFrame {
 
     private void bDescartarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDescartarActionPerformed
         mwd.lista.remove(formulario);
+        mwd.setVisible(true);
         dispose();
     }//GEN-LAST:event_bDescartarActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+        mwd.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_formWindowClosed
 
     void addTaPerguntas(String str){
         taPerguntas.append("#" + taPerguntas.getLineCount() + " "+ str + '\n');
