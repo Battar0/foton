@@ -218,64 +218,6 @@ public class fdfWriter extends fdfFormat
      */
     public void writeFormulario(Formulario frm) throws IOException
     {
-        File tempFileHandle = new File(arquivo + ".tmp");
-        try (RandomAccessFile raf_tempFile = new RandomAccessFile(tempFileHandle.getName(), "rws")) {
-            String original_file_line;
-            // Abrindo o arquivo do formulário no modo leitura/escrita
-            init();
-            // Garantindo que estaremos sempre no início do arquivo ...
-            super.raf_outputStream.seek(0);
-            while (true) {
-                original_file_line = super.raf_outputStream.readLine();
-                if(original_file_line == null)
-                    break;
-                
-                if(original_file_line.startsWith(super.nome_fim_secao_perguntas))
-                {
-                    // Pego todas as respostas, e salvo no lugar daquela seção
-                    // Após isso, finalizo ela
-                    
-                    for(Pergunta p : frm.questoes)
-                    {
-                        java.security.SecureRandom random = new java.security.SecureRandom();
-                        int id = random.nextInt();
-                        
-                        // Escreve no arquivo o tipo, o id e o título da pergunta
-                        raf_tempFile.writeBytes("=" + get_tipo_str(p.getTipo()) + "," + id + "\n" + "#" + p.getTexto() + "\n");
-                        
-                        switch(p.getTipo())
-                        {
-                            case LIVRE:
-                                PerguntaAberta ab = (PerguntaAberta)p;
-                                raf_tempFile.writeBytes(ab.getResposta()[0]);
-                                break;
-                                
-                            case EXCLUSIVA:
-                            case LISTA:
-                                PerguntaOpcaoUnica op = (PerguntaOpcaoUnica)p;
-                                raf_tempFile.writeBytes(op.getResposta()[0]);
-                                break;
-                                
-                            case OPCIONAL:
-                                PerguntaOpcional po = (PerguntaOpcional)p;
-                                raf_tempFile.writeBytes(po.getResposta()[0]);
-                                break;
-                        }
-                    }
-                    
-                    raf_tempFile.writeBytes( "\n" + super.nome_fim_secao_respostas + "\n");
-                } else {
-                    raf_tempFile.writeBytes(original_file_line + "\n");
-                }
-            }
-            // Fecha o arquivo temporário
-        }
-        
-        // Finalizando as operações de E/S
-        stop();
-        
-        // Sobrescreve o arquivo original
-        tempFileHandle.renameTo(super.outputFileHandle);
 
     }
 };

@@ -5,8 +5,6 @@
  */
 package regrasNegocio;
 
-import FDF.fdfFile.tipos_perguntas;
-
 /**
  * Classe usada para representar perguntas de um formulário
  *

@@ -15,6 +15,7 @@ import java.util.*;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import regrasNegocio.Pergunta;
+import regrasNegocio.PerguntaExclusiva;
 
 /**
  *
@@ -197,10 +198,12 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_bCriarActionPerformed
     
     private void bResponderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bResponderActionPerformed
-        Pergunta pergunta = this.lista.get(cbFormularios.getSelectedIndex()).questoes.get(0);
-        tipos_perguntas _tipo = pergunta.getTipo();
+        Pergunta pergunta = this.lista.get(cbFormularios.getSelectedIndex()).perguntas.get(0);
         
-        switch(_tipo)
+        // COMO IREI DIFERENCIAR AS PERGUNTAS AQUI?
+        
+        /*
+        switch(pergunta.)
         {
             case EXCLUSIVA:
             case LISTA:
@@ -223,6 +226,7 @@ public class MainWindow extends javax.swing.JFrame {
                 resp_opcional.setVisible(true);
                 break;
         }
+        */
     }//GEN-LAST:event_bResponderActionPerformed
 
     private void bApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bApagarActionPerformed

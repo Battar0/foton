@@ -20,7 +20,7 @@ public class QuestionWindow extends javax.swing.JFrame
         "lista",
         "alternativa",
         "exclusiva",
-        "ppcional"
+        "opcional"
     };
     /**
      * Creates new form QuestionWindow
@@ -173,12 +173,13 @@ public class QuestionWindow extends javax.swing.JFrame
                 throw new EnunciadoNaoInformadoException();
             else
             {
+                String texto_enunciado = enunciado.getText();
+                
                 // Verifica se a pergunta é de resposta livre
                 if (cbAlternativas.getSelectedItem().toString().toLowerCase().equals(tipos_perguntas_strings[0]))
                 {
                     // Cria a pergunta e adciona a lista
                     PerguntaAberta pergunta = new PerguntaAberta(enunciado.getText());
-                    pergunta.setTipo(tipos_perguntas.LIVRE);
                     
                     formPai.formulario.add(pergunta);
                     formPai.addTaPerguntas(pergunta.getTexto());
@@ -193,29 +194,38 @@ public class QuestionWindow extends javax.swing.JFrame
                         throw new AlternativasNaoInformadasException();
                     
                     // Separa as alternativas por '\n'
-                    String[] str = saux.split("\n");
+                    String[] str_alternativas = saux.split("\n");
                     
                     // Cria a pergunta e adciona a lista
-                    PerguntaFechada pergunta = new PerguntaFechada(enunciado.getText(), str);
                     
                     String cb_alternativas_str = cbAlternativas.getSelectedItem().toString();
+                        
+                    Pergunta pa;
                     
-                    if(cb_alternativas_str.equals(tipos_perguntas_strings[0]))
-                        pergunta.setTipo(tipos_perguntas.LIVRE);
-                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[1]))
-                        pergunta.setTipo(tipos_perguntas.LISTA);
-                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[2]))
-                        pergunta.setTipo(tipos_perguntas.ALTERNATIVA);
-                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[3]))
-                        pergunta.setTipo(tipos_perguntas.EXCLUSIVA);
-                    else if(cb_alternativas_str.equals(tipos_perguntas_strings[4]))
-                        pergunta.setTipo(tipos_perguntas.OPCIONAL);
-                    else {
-                        System.out.println( "Erro fatal: a combo box possui um texto que não deveria");
+                    if(cb_alternativas_str.equals(tipos_perguntas_strings[1]))
+                    {
+                        pa = (PerguntaLista)new PerguntaLista(texto_enunciado, str_alternativas);
+                    } else if(cb_alternativas_str.equals(tipos_perguntas_strings[2]))
+                    {
+                        pa = (PerguntaAlternativa)new PerguntaAlternativa(texto_enunciado, str_alternativas);
+                    } else if(cb_alternativas_str.equals(tipos_perguntas_strings[3]))
+                    {
+                        pa = (PerguntaExclusiva)new PerguntaExclusiva(texto_enunciado, str_alternativas);
+                    } else if(cb_alternativas_str.equals(tipos_perguntas_strings[4]))
+                    {
+                        pa = (PerguntaOpcional)new PerguntaOpcional(texto_enunciado);
+                    } else {
+                        System.out.println( "Erro fatal: alternativa desconhecida: " + cb_alternativas_str);
+                        pa = null;
                     }
                     
-                    formPai.formulario.add(pergunta);
-                    formPai.addTaPerguntas(pergunta.getTexto());
+                    if(pa != null) 
+                    {
+                        formPai.formulario.add(pa);
+                        formPai.addTaPerguntas(pa.getTexto());
+                    } else {
+                        System.out.println("Erro: variável não inicializada");
+                    }
                 }
                 
                 dispose();
