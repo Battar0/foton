@@ -1,26 +1,47 @@
 package regrasNegocio;
 
+/**
+ * Classe para perguntas fechadas que admitem apenas uma resposta
+ *
+ * @author b2198
+ */
 public abstract class PerguntaOpcaoUnica extends PerguntaFechada {
 
-
+    /**
+     * Cria uma pergunta de opção única e inicializa os atributos texto e alternativas
+     *
+     * @param texto o texto da pergunta
+     * @param alternativas as alternativas da pergunta
+     */
     public PerguntaOpcaoUnica(String texto, String[] alternativas) {
         super(texto, alternativas);
     }
 
-
+    /**
+     * Seta as respostas da pergunta, verificando se há apenas uma
+     *
+     * @param respostas as respostas da pergunta
+     */
     @Override
-    public boolean setResposta(String[] resposta) {
-        if(resposta.length == 1) {
-            return super.setResposta(resposta);
+    public void setRespostas(String[] respostas) {
+        if(respostas.length == 1) {
+            setRespostas(respostas);
+        } else{
+            //lança exceção
         }
-        return false;
     }
 
+    /**
+     * Seta as respostas da pergunta a partir dos índices das alternativas, verificando se há apenas uma resposta
+     *
+     * @param numerosRespostas os índices das respostas da pergunta
+     */
     @Override
-    public boolean setResposta(int... numerosRespostas) {
+    public void setResposta(int... numerosRespostas) {
         if(numerosRespostas.length == 1) {
-            return super.setResposta(numerosRespostas);
+            setResposta(numerosRespostas);
+        } else{
+            //lança exceção
         }
-        return false;
     }
 }

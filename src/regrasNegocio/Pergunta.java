@@ -8,44 +8,67 @@ package regrasNegocio;
 import FDF.fdfFile.tipos_perguntas;
 
 /**
+ * Classe usada para representar perguntas de um formulário
  *
  * @author b2198
  */
 public abstract class Pergunta 
 {
+    /**
+     * texto da pergunta
+     */
     private String texto;
-    private String[] resposta;
-    private tipos_perguntas tipo;
+    /**
+     * lista de repostas da pergunta
+     */
+    private String[] respostas;
 
+    /**
+     * Cria uma pergunta e inicializa o atributo texto
+     *
+     * @param texto o texto da pergunta
+     */
     public Pergunta(String texto){
         setTexto(texto);
     }
-
-    public void setTipo(tipos_perguntas tipo_perg){
-        tipo = tipo_perg;
-    }
-    
-    public tipos_perguntas getTipo()
-    {
-        return tipo;
-    }
-    
-    public String getTexto() 
-    {
+    /**
+     *
+     * @return o texto da pergunta
+     */
+    public String getTexto(){
         return texto;
     }
 
+    /**
+     * Seta o texto da pergunta
+     *
+     * @param texto o texto da pergunta
+     */
     public void setTexto(String texto) {
         this.texto = texto;
     }
 
-    public String[] getResposta() {
-        return resposta;
+    /**
+     *
+     * @return as respostas da pergunta
+     */
+    public String[] getRespostas() {
+        return respostas;
     }
 
-    protected void setRespostaInterno(String[] resposta){
-        this.resposta = resposta;
+    /**
+     * Seta as respostas da pergunta
+     *
+     * @param respostas as respostas da pergunta
+     */
+    protected void setRespostasInterno(String[] respostas){
+        this.respostas = respostas;
     }
 
-    public abstract boolean setResposta(String[] resposta);
+    /**
+     * Seta as respostas da pergunta
+     *
+     * @param respostas as respostas da pergunta
+     */
+    public abstract void setRespostas(String[] respostas);
 }

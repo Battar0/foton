@@ -16,98 +16,174 @@ import java.util.ArrayList;
  */
 public class Formulario
 {
+    /**
+     * nome do formulário
+     */
     private String nome;
+    /**
+     * descrição do formulário
+     */
     private String descricao;
+    /**
+     * data de início do formulário
+     */
     private String dataInicio;
+    /**
+     * data de término do formulário
+     */
     private String dataTermino;
+    /**
+     * nome do autor do formulário
+     */
     private String nomeAutor;
-    public ArrayList<Pergunta> questoes;
-    
+    /**
+     * lista de perguntas do formulário
+     */
+    private ArrayList<Pergunta> perguntas;
+
+    /**
+     * Cria um formulário e inicializa os atributos nome, descricao, nomeAutor e perguntas
+     * 
+     * @param nome nome do formulário
+     * @param descricao descrição do formulário
+     * @param nomeAutor nome do autor do formulário
+     */
     public Formulario(String nome, String descricao, String nomeAutor){
         this.nome = nome;
         this.descricao = descricao;
         this.nomeAutor = nomeAutor;
         
-        questoes = new ArrayList<>();
+        perguntas = new ArrayList<>();
     }
     
     /**
-     *  
-     * @param pergunta
-     * Adiciona uma pergunta ao banco de questões do formulário
+     * Adiciona uma pergunta à lista de perguntas do formulário
+     * 
+     * @param pergunta pergunta a ser adicionada
      */
     public void add(Pergunta pergunta){
-        questoes.add(pergunta);
+        perguntas.add(pergunta);
     }
     
     /**
-     *
-     * @param pergunta
-     * Remove uma pergunta ao banco de questões do formulário
+     *Remove uma pergunta da lista de perguntas do formulário
+     * 
+     * @param pergunta pergunta a ser removida
      */
     public void rmv(Pergunta pergunta){
-        questoes.remove(pergunta);
+        perguntas.remove(pergunta);
     }
-    
-    public int questoesSize(){
-        return questoes.size();
+
+    /**
+     * Equivalente a getPerguntas().size()
+     * 
+     * @return o número de perguntas do formulário
+     */
+    public int perguntasSize(){
+        return perguntas.size();
     }
-    
+
+    /**
+     * Equivalente a getPerguntas.get(x)
+     *
+     * @param x
+     * @return a pergunta no índice x da lista
+     */
     public Pergunta get(int x){
-        return questoes.get(x);
+        return perguntas.get(x);
     }
-    
+
+    /**
+     *
+     * @return o nome do formulário
+     */
     public String getNome() {
         return nome;
     }
 
+    /**
+     *
+     * @return a descrição do formulário
+     */
     public String getDescricao() {
         return descricao;
     }
 
+    /**
+     *
+     * @return a data de início do formulário
+     */
     public String getDataInicio() {
         return dataInicio;
     }
 
+    /**
+     *
+     * @return a data de término do formulário
+     */
     public String getDataTermino() {
         return dataTermino;
     }
 
-    public ArrayList<Pergunta> getQuestoes() {
-        return questoes;
+    /**
+     *
+     * @return a lista de perguntas do formulário
+     */
+    public ArrayList<Pergunta> getPerguntas() {
+        return perguntas;
     }
 
+    /**
+     *
+     * @return o nome do autor do formulário
+     */
     public String getNomeAutor() {
         return nomeAutor;
     }
 
-    public boolean setNome(String nome) {
+    /**
+     * Seta o nome do formulário
+     *
+     * @param nome o nome do formulário
+     */
+    public void setNome(String nome) {
         this.nome = nome;
-        
-        return true;
     }
-    
-    public boolean setNomeAutor(String nome) {
+
+    /**
+     * Seta o nome do autor do formulário
+     *
+     * @param nome o nome do autor do formulário
+     */
+    public void setNomeAutor(String nome) {
         this.nomeAutor = nome;
-        
-        return true;
     }
 
-    public boolean setDescricao(String descricao) {
+    /**
+     * Seta a descrição do formulário
+     *
+     * @param descricao a descrição do formulário
+     */
+    public void setDescricao(String descricao) {
         this.descricao = descricao;
-        
-        return true;
+
     }
 
-    public boolean setDataInicio(String dataInicio) {
+    /**
+     * Seta a data de início do formulário
+     *
+     * @param dataInicio a data de início do formulário
+     */
+    public void setDataInicio(String dataInicio) {
         this.dataInicio = dataInicio;
-        
-        return true;
     }
 
-    public boolean setDataTermino(String dataTermino) {
+    /**
+     * Seta a data de término do formulário
+     *
+     * @param dataTermino a data de término do formulário
+     */
+    public void setDataTermino(String dataTermino) {
         this.dataTermino = dataTermino;
-        
-        return true;
     }    
 }
