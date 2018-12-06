@@ -1,5 +1,7 @@
 package regrasNegocio;
 
+import Excecoes.NumeroRespostasIncorretoException;
+
 /**
  * Classe usada para as perguntas do tipo aberta
  *
@@ -24,11 +26,11 @@ public class PerguntaAberta extends Pergunta {
      * @param respostas as respostas da pergunta
      */
     @Override
-    public void setRespostas(String[] respostas) {
+    public void setRespostas(String[] respostas) throws NumeroRespostasIncorretoException {
         if(respostas.length == 1) {
             setRespostasInterno(respostas);
         } else{
-            //lançar exceção
+            throw new NumeroRespostasIncorretoException(1,respostas.length);
         }
     }
 
@@ -38,6 +40,10 @@ public class PerguntaAberta extends Pergunta {
      * @param resposta a resposta da pergunta
      */
     public void setReposta(String resposta){
-        setRespostas(new String[]{resposta});
+        try {
+            setRespostas(new String[]{resposta});
+        } catch(NumeroRespostasIncorretoException ex){
+            System.out.println("This exception should be impossible: " + ex.getMessage());
+        }
     }
 }

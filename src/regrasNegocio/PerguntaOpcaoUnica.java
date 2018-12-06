@@ -1,5 +1,9 @@
 package regrasNegocio;
 
+import Excecoes.NumeroRespostasIncorretoException;
+import Excecoes.RespostaInvalidaException;
+import Excecoes.RespostaRepetidaException;
+
 /**
  * Classe para perguntas fechadas que admitem apenas uma resposta
  *
@@ -23,14 +27,16 @@ public abstract class PerguntaOpcaoUnica extends PerguntaFechada {
      * @param respostas as respostas da pergunta
      */
     @Override
-    public void setRespostas(String[] respostas) {
-        // TODO: Tratar a exception sendo lançada ao utilizar este método...
-        
-        //if(respostas.length == 1)
-            setRespostas(respostas);
-        //} else{
-            //lança exceção
-        //}
+    public void setRespostas(String[] respostas) throws NumeroRespostasIncorretoException, RespostaInvalidaException {
+        if(respostas.length == 1){
+            try {
+                super.setRespostas(respostas);
+            } catch(RespostaRepetidaException ex){
+                System.out.println("This exception should be impossible: " + ex.getMessage());
+            }
+        } else{
+            throw new NumeroRespostasIncorretoException(1,respostas.length);
+        }
     }
 
     /**
