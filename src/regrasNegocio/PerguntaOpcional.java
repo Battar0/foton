@@ -22,5 +22,6 @@ public class PerguntaOpcional extends PerguntaOpcaoUnica {
      * @param alternativas
      */
     @Override
-    public void setAlternativas(String[] alternativas) {}
+    public void setAlternativas(String[] alternativas) {
+    }
 }

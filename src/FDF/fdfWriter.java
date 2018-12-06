@@ -257,7 +257,7 @@ public class fdfWriter extends fdfFormat
                     original_file_line = v_str[0] + "=" + v_str[1];
                 }
                 
-                if(original_file_line.startsWith(super.nome_fim_secao_respostas))
+                if(original_file_line.startsWith(super.nome_fim_secao_perguntas))
                 {
                     // Pego todas as respostas, e salvo no lugar daquela seção
                     // Após isso, finalizo ela
@@ -277,14 +277,16 @@ public class fdfWriter extends fdfFormat
                         } else if(p instanceof PerguntaOpcional)
                         {
                             // Escreve no arquivo as alternativas daquela pergunta
-                            PerguntaFechada pf = (PerguntaFechada)p;
+                            PerguntaOpcional pf = (PerguntaOpcional)p;
+                            int n_alternativas = pf.getNumeroAlternativas();
                             
-                            if(pf.getNumeroAlternativas() > 2)
+                            if(n_alternativas > 2)
                             {
                                 System.out.println( "Por qual motivo uma pergunta do tipo opcional tem mais de duas alternativas?");
                             }
                             
-                            raf_tempFile.writeBytes("$" + pf.getAlternativa(0) + "\n$" + pf.getAlternativa(1) + "\n");
+                            for(int j = 0; j < n_alternativas; j++)
+                                raf_tempFile.writeBytes("$" + pf.getAlternativa(j) + "\n");
                         }
                         else if(p instanceof PerguntaExclusiva)
                         {
@@ -299,19 +301,20 @@ public class fdfWriter extends fdfFormat
                         } else if(p instanceof PerguntaLista)
                         {
                             // Escreve no arquivo as alternativas daquela pergunta
-                            PerguntaFechada pf = (PerguntaFechada)p;
-                            int count = pf.getNumeroAlternativas();
+                            PerguntaLista pl = (PerguntaLista)p;
+                                
+                            int count = pl.getNumeroAlternativas();
                             
                             for(int j = 0; j < count; j++)
                             {
-                                raf_tempFile.writeBytes("@" + pf.getAlternativa(j) + "\n");
+                                raf_tempFile.writeBytes("@" + pl.getAlternativa(j) + "\n");
                             }  
                         } else {
                             throw new InvalidClassException("Tipo de pergunta inválida especificada");
                         }
                     }
                     
-                    raf_tempFile.writeBytes( "\n" + super.nome_fim_secao_respostas + "\n");
+                    raf_tempFile.writeBytes( "\n" + super.nome_fim_secao_perguntas + "\n");
                 } else {
                     raf_tempFile.writeBytes(original_file_line + "\n");
                 }
@@ -319,7 +322,7 @@ public class fdfWriter extends fdfFormat
             // Fecha o arquivo temporário
         } catch(IOException e)
         {
-            System.out.println(e.getMessage());
+            System.out.println("Erro: " + e.getMessage());
         }
         
         // Fecha o arquivo original

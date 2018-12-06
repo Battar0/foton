@@ -10,7 +10,7 @@ public class PerguntaFechada extends Pergunta {
     /**
      * as alternativas da pergunta fechada
      */
-    private String[] alternativas;
+    private String[] alternativas = { "" };
 
     /**
      * Cria uma pergunta fechada e inicializa os atributos texto e alternativas
@@ -21,7 +21,6 @@ public class PerguntaFechada extends Pergunta {
     public PerguntaFechada(String texto, String[] alternativas){
         super(texto);
         this.setAlternativas(alternativas);
-        this.alternativas = null;
     }
 
     /**
@@ -91,8 +90,12 @@ public class PerguntaFechada extends Pergunta {
      *
      * @return o número de alternativas desta pergunta fechada
      */
-    public int getNumeroAlternativas(){
-        return alternativas.length;
+    public int getNumeroAlternativas()
+    {
+        if(alternativas != null)
+            return alternativas.length;
+        
+        return 0;
     }
 
     /**

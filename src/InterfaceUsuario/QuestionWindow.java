@@ -217,9 +217,9 @@ public class QuestionWindow extends javax.swing.JFrame
                         formPai.formulario.add(pergunta);
                         formPai.addTaPerguntas(pergunta.getTexto());
                     }
-                    
-                    else 
+                    else { 
                         System.out.println("Erro: variável não inicializada");
+                    }
                 }
                 
                 dispose();

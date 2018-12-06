@@ -422,7 +422,9 @@ public class FormWindow extends javax.swing.JFrame {
                 int segundo = calendar.get(Calendar.SECOND);
                 
                 // Não precisa colocar o .fdf no nome do arquivo, pois a classe já faz isso automaticamente
-                fdfWriter fdf = new fdfWriter("formulario_" + dia + "_" + mes + "_" + ano + "_" + hora + "_" + minuto + "_" + segundo);
+                fdfWriter fdf;
+                
+                fdf = new fdfWriter("formulario_" + dia + + mes + ano + hora + minuto + segundo);
                 
                 try {
                     fdf.writeFormulario(formulario);
