@@ -1,5 +1,9 @@
 package regrasNegocio;
 
+import Excecoes.NumeroRespostasIncorretoException;
+import Excecoes.RespostaInvalidaException;
+import Excecoes.RespostaRepetidaException;
+
 /**
  * Classe para todas as perguntas que envolvem alternativas
  *
@@ -29,13 +33,13 @@ public class PerguntaFechada extends Pergunta {
      * @param respostas as respostas da pergunta
      */
     @Override
-    public void setRespostas(String[] respostas) {
+    public void setRespostas(String[] respostas) throws NumeroRespostasIncorretoException, RespostaRepetidaException, RespostaInvalidaException {
 
         //checa se não há respostas repetidas
         for(int i = 0; i < respostas.length-1; i++){
-            for(int j = i; j < respostas.length; j++){
+            for(int j = i+1; j < respostas.length; j++){
                 if(respostas[i].equals(respostas[j])){
-                    //lança exceção
+                    throw new RespostaRepetidaException();
                 }
             }
         }
@@ -59,7 +63,7 @@ public class PerguntaFechada extends Pergunta {
         if(valida) {
             setRespostasInterno(respostas);
         } else{
-            //lança exceção
+            throw new RespostaInvalidaException();
         }
     }
 
@@ -68,12 +72,12 @@ public class PerguntaFechada extends Pergunta {
      *
      * @param numerosRespostas os índices das respostas da pergunta
      */
-    public void setResposta(int... numerosRespostas){
+    public void setResposta(int... numerosRespostas) throws RespostaRepetidaException{
 
         for(int i = 0; i < numerosRespostas.length-1; i++){
-            for(int j = i; j < numerosRespostas.length; j++){
+            for(int j = i+1; j < numerosRespostas.length; j++){
                 if(numerosRespostas[i] == numerosRespostas[j]){
-                    //lança exceção
+                    throw new RespostaRepetidaException();
                 }
             }
         }

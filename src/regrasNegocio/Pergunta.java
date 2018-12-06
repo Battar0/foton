@@ -5,6 +5,10 @@
  */
 package regrasNegocio;
 
+import Excecoes.NumeroRespostasIncorretoException;
+import Excecoes.RespostaInvalidaException;
+import Excecoes.RespostaRepetidaException;
+
 /**
  * Classe usada para representar perguntas de um formulário
  *
@@ -68,5 +72,5 @@ public abstract class Pergunta
      *
      * @param respostas as respostas da pergunta
      */
-    public abstract void setRespostas(String[] respostas);
+    public abstract void setRespostas(String[] respostas) throws NumeroRespostasIncorretoException, RespostaRepetidaException, RespostaInvalidaException;
 }
