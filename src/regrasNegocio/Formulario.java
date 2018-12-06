@@ -39,7 +39,7 @@ public class Formulario
     /**
      * lista de perguntas do formulário
      */
-    public ArrayList<Pergunta> perguntas;
+    private ArrayList<Pergunta> perguntas;
 
     /**
      * Cria um formulário e inicializa os atributos nome, descricao, nomeAutor e perguntas

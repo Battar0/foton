@@ -63,6 +63,11 @@ public class ResponderAberta extends javax.swing.JFrame {
         jScrollPane2.setViewportView(taEnunciado);
 
         bVoltar.setText("Voltar");
+        bVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bVoltarActionPerformed(evt);
+            }
+        });
 
         bAvançar.setText("Avançar");
         bAvançar.addActionListener(new java.awt.event.ActionListener() {
@@ -108,24 +113,37 @@ public class ResponderAberta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
-        String aux = taResposta.toString();
         
-        String[] resposta = new String[1];
-        resposta[0] = aux;
-        
-        form.perguntas.get(proxPergunta - 1).setRespostas(resposta);
+        // If impede que a janela seja fechada se não houver alternativas escolhidas
+        if(!taResposta.getText().isEmpty()){
+            String aux = taResposta.toString();
+
+            String[] resposta = new String[1];
+            resposta[0] = aux;
+
+            form.get(proxPergunta - 1).setRespostas(resposta);
+
+            dispose();
+
+            if(proxPergunta < form.perguntasSize())
+                MainWindow.responderPergunta(form, proxPergunta);
+
+            else{
+                JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
+                JDialog dialog = optionPane.createDialog("");
+                dialog.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_bAvançarActionPerformed
+
+    private void bVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bVoltarActionPerformed
+        int antePergunta = (proxPergunta - 2);
         
         dispose();
         
-        if(proxPergunta < form.perguntasSize())
-            MainWindow.responderPergunta(form, proxPergunta);
-        
-        else{
-            JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
-            JDialog dialog = optionPane.createDialog("");
-            dialog.setVisible(true);
-        }
-    }//GEN-LAST:event_bAvançarActionPerformed
+        if(antePergunta >= 0)
+            MainWindow.responderPergunta(form, antePergunta);
+    }//GEN-LAST:event_bVoltarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAvançar;

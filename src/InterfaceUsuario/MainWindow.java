@@ -216,25 +216,30 @@ public class MainWindow extends javax.swing.JFrame {
 
     
     // Abre a janela especifica para pergunta a ser respondida
-    public static void responderPergunta(Formulario form, int proxPergunta){
+    public static void responderPergunta(Formulario form, int pergunta){
         
-        if (form.perguntas.get(proxPergunta) instanceof PerguntaLista){
-            ResponderLista resp_lista = new ResponderLista(form, proxPergunta);
+        if (form.get(pergunta) instanceof PerguntaLista){
+            ResponderLista resp_lista = new ResponderLista(form, pergunta);
             resp_lista.setVisible(true);
         }
+        
+        else if (form.get(pergunta) instanceof PerguntaExclusiva){
+            ResponderExclusiva resp_excl = new ResponderExclusiva(form, pergunta);
+            resp_excl.setVisible(true);
+        }
 
-        else if (form.perguntas.get(proxPergunta) instanceof PerguntaAberta){
-            ResponderAberta resp_aberta = new ResponderAberta(form, proxPergunta);
+        else if (form.get(pergunta) instanceof PerguntaAberta){
+            ResponderAberta resp_aberta = new ResponderAberta(form, pergunta);
             resp_aberta.setVisible(true);
         }
 
-        else if (form.perguntas.get(proxPergunta) instanceof PerguntaAlternativa){
-            ResponderAlternativa resp_alternativa = new ResponderAlternativa(form, proxPergunta);
+        else if (form.get(pergunta) instanceof PerguntaAlternativa){
+            ResponderAlternativa resp_alternativa = new ResponderAlternativa(form, pergunta);
             resp_alternativa.setVisible(true);
         }
 
-        else if (form.perguntas.get(proxPergunta) instanceof PerguntaOpcional){
-            ResponderOpcional resp_opcional = new ResponderOpcional(form, proxPergunta);
+        else if (form.get(pergunta) instanceof PerguntaOpcional){
+            ResponderOpcional resp_opcional = new ResponderOpcional(form, pergunta);
             resp_opcional.setVisible(true);
         }
    
