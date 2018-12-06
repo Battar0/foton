@@ -93,6 +93,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Voltar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bVoltarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="bAvan&#xe7;ar">
       <Properties>
@@ -106,11 +109,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Sim"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bSimActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="bNao">
       <Properties>
         <Property name="text" type="java.lang.String" value="N&#xe3;o"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bNaoActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

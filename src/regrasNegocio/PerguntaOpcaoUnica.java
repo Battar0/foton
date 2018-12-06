@@ -24,11 +24,13 @@ public abstract class PerguntaOpcaoUnica extends PerguntaFechada {
      */
     @Override
     public void setRespostas(String[] respostas) {
-        if(respostas.length == 1) {
+        // TODO: Tratar a exception sendo lançada ao utilizar este método...
+        
+        //if(respostas.length == 1)
             setRespostas(respostas);
-        } else{
+        //} else{
             //lança exceção
-        }
+        //}
     }
 
     /**

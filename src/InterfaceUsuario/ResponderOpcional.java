@@ -62,6 +62,11 @@ public class ResponderOpcional extends javax.swing.JFrame {
         jScrollPane2.setViewportView(taEnunciado);
 
         bVoltar.setText("Voltar");
+        bVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bVoltarActionPerformed(evt);
+            }
+        });
 
         bAvançar.setText("Avançar");
         bAvançar.addActionListener(new java.awt.event.ActionListener() {
@@ -71,8 +76,18 @@ public class ResponderOpcional extends javax.swing.JFrame {
         });
 
         bSim.setText("Sim");
+        bSim.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bSimActionPerformed(evt);
+            }
+        });
 
         bNao.setText("Não");
+        bNao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bNaoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -118,28 +133,53 @@ public class ResponderOpcional extends javax.swing.JFrame {
     private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
         String aux = new String();
         
-        if(bSim.isSelected())
-            aux = "Sim";
-        
-        else
-            aux = "Não";
-        
-        String[] resposta = new String[1];
-        resposta[0] = aux;
-        
-        form.perguntas.get(proxPergunta - 1).setRespostas(resposta);
+        if(bSim.isSelected() || bNao.isSelected()){
+            if(bSim.isSelected())
+                aux = "Sim";
+
+            else
+                aux = "Não";
+
+            String[] resposta = new String[1];
+            resposta[0] = aux;
+
+            form.get(proxPergunta - 1).setRespostas(resposta);
+
+            dispose();
+
+            if(proxPergunta < form.perguntasSize())
+                MainWindow.responderPergunta(form, proxPergunta);
+
+            else{
+                JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
+                JDialog dialog = optionPane.createDialog("");
+                dialog.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_bAvançarActionPerformed
+
+    private void bVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bVoltarActionPerformed
+        int antePergunta = (proxPergunta - 2);
         
         dispose();
         
-        if(proxPergunta < form.perguntasSize())
-            MainWindow.responderPergunta(form, proxPergunta);
+        if(antePergunta >= 0)
+            MainWindow.responderPergunta(form, antePergunta);
+    }//GEN-LAST:event_bVoltarActionPerformed
+
+    private void bSimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bSimActionPerformed
+        bSim.setSelected(true);
         
-        else{
-            JOptionPane optionPane = new JOptionPane("Formulario respondido!", JOptionPane.OK_OPTION);    
-            JDialog dialog = optionPane.createDialog("");
-            dialog.setVisible(true);
-        }
-    }//GEN-LAST:event_bAvançarActionPerformed
+        if(bNao.isSelected())
+            bNao.setSelected(false);
+    }//GEN-LAST:event_bSimActionPerformed
+
+    private void bNaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bNaoActionPerformed
+        bNao.setSelected(true);
+        
+        if(bSim.isSelected())
+            bSim.setSelected(false);
+    }//GEN-LAST:event_bNaoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAvançar;

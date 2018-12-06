@@ -11,6 +11,7 @@ import regrasNegocio.Formulario;
 import regrasNegocio.Pergunta;
 import regrasNegocio.PerguntaAberta;
 import regrasNegocio.PerguntaAlternativa;
+import regrasNegocio.PerguntaExclusiva;
 import regrasNegocio.PerguntaLista;
 import regrasNegocio.PerguntaOpcional;
 
@@ -18,19 +19,19 @@ import regrasNegocio.PerguntaOpcional;
  *
  * @author Windows 10
  */
-public class ResponderLista extends javax.swing.JFrame {
+public class ResponderExclusiva extends javax.swing.JFrame {
     Formulario form;
-    PerguntaLista pergunta;
+    PerguntaExclusiva pergunta;
     int proxPergunta;
     /**
      * Creates new form ResponderAberta
      */
-    public ResponderLista(Formulario formR, int index) {
+    public ResponderExclusiva(Formulario formR, int index) {
         initComponents();
         this.setLocationRelativeTo(null);
         
         form = formR;
-        pergunta = (PerguntaLista)form.get(index);
+        pergunta = (PerguntaExclusiva)form.get(index);
         proxPergunta = index + 1;
         
         taEnunciado.setText(formR.get(index).getTexto());
