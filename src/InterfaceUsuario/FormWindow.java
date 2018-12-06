@@ -384,10 +384,10 @@ public class FormWindow extends javax.swing.JFrame {
         try 
         {
             // adcionar data na verificação
-            if (nome_autor.getText().isEmpty() || 
+            if (nome_autor.getText().isEmpty()      || 
                 nome_formulario.getText().isEmpty() || 
-                descricao.getText().isEmpty() || 
-                dataInicio.getText().isEmpty() || 
+                descricao.getText().isEmpty()       || 
+                dataInicio.getText().isEmpty()      || 
                 dataTermino.getText().isEmpty())
             {
                 throw new DescricaoObrigatoriaNaoInformadaException();
@@ -424,7 +424,7 @@ public class FormWindow extends javax.swing.JFrame {
                 // Não precisa colocar o .fdf no nome do arquivo, pois a classe já faz isso automaticamente
                 fdfWriter fdf;
                 
-                fdf = new fdfWriter("formulario_" + dia + + mes + ano + hora + minuto + segundo);
+                fdf = new fdfWriter("formulario_" + formulario.getNome() + "_" + dia + + mes + ano + "_" + hora + minuto + segundo);
                 
                 try {
                     fdf.writeFormulario(formulario);
