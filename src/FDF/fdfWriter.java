@@ -8,11 +8,15 @@ package FDF;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InvalidClassException;
 import java.io.RandomAccessFile;
 
 import regrasNegocio.Formulario;
 import regrasNegocio.Pergunta;
 import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaExclusiva;
+import regrasNegocio.PerguntaFechada;
+import regrasNegocio.PerguntaLista;
 import regrasNegocio.PerguntaOpcaoUnica;
 import regrasNegocio.PerguntaOpcional;
 
@@ -40,6 +44,8 @@ public class fdfWriter extends fdfFormat
      */
     private void init() throws FileNotFoundException, IOException
     {
+        System.out.println( "Init: " + super.outputFileHandle.getAbsolutePath());
+        
         if(super.outputFileHandle.exists())
             fdfWriter_file = openWrite(this.arquivo, true);
         else
@@ -215,9 +221,117 @@ public class fdfWriter extends fdfFormat
      * @param frm
      * Instância da classe inicializada aonde os dados a serem salvos estão armazenados
      * @throws IOException
+     * @throws java.io.InvalidClassException
      */
-    public void writeFormulario(Formulario frm) throws IOException
+    public void writeFormulario(Formulario frm) throws IOException, InvalidClassException
     {
+        String[] v_str;
+        File tempFileHandle = new File(this.arquivo + ".tmp");
+        int qtd_perguntas = frm.getPerguntas().size();
+        RandomAccessFile raf_tempFile = null;
+        
+        try 
+        {
+            raf_tempFile = new RandomAccessFile(tempFileHandle.getName(), "rws");
+                    
+            String original_file_line;
+            
+            // Abrindo o arquivo do formulário no modo leitura/escrita
+            init();
+            
+            // Garantindo que estaremos sempre no início do arquivo ...
+            super.raf_outputStream.seek(0);
+            
+            while (true) 
+            {
+                original_file_line = super.raf_outputStream.readLine();
+                if(original_file_line == null)
+                    break;
+                
+                if(original_file_line.startsWith(super.nome_secao_nome + "="))
+                {
+                    // Preciso substituir o nome armazenado pelo nome especificado
+                    
+                    v_str = original_file_line.split("=");
+                    v_str[1] = frm.getNome() + ", Autor: " + frm.getNomeAutor();
+                    original_file_line = v_str[0] + "=" + v_str[1];
+                }
+                
+                if(original_file_line.startsWith(super.nome_fim_secao_respostas))
+                {
+                    // Pego todas as respostas, e salvo no lugar daquela seção
+                    // Após isso, finalizo ela
+                    
+                    for(int i = 0; i < qtd_perguntas; i++)
+                    {
+                        Pergunta p = frm.getPerguntas().get(i);
+                        
+                        if(p instanceof PerguntaAberta)
+                        {
+                            // Escreve o tipo e o ID da pergunta
+                            raf_tempFile.writeBytes("=" + get_tipo_str(tipos_perguntas.LIVRE) + ",ID\n");
 
+                            // Escreve o texto dela
+                            raf_tempFile.writeBytes("#" + p.getTexto() + "\n");
+                            
+                        } else if(p instanceof PerguntaOpcional)
+                        {
+                            // Escreve no arquivo as alternativas daquela pergunta
+                            PerguntaFechada pf = (PerguntaFechada)p;
+                            
+                            if(pf.getNumeroAlternativas() > 2)
+                            {
+                                System.out.println( "Por qual motivo uma pergunta do tipo opcional tem mais de duas alternativas?");
+                            }
+                            
+                            raf_tempFile.writeBytes("$" + pf.getAlternativa(0) + "\n$" + pf.getAlternativa(1) + "\n");
+                        }
+                        else if(p instanceof PerguntaExclusiva)
+                        {
+                            // Escreve no arquivo as alternativas daquela pergunta
+                            PerguntaFechada pf = (PerguntaFechada)p;
+                            int count = pf.getNumeroAlternativas();
+                            
+                            for(int j = 0; j < count; j++)
+                            {
+                                raf_tempFile.writeBytes("!" + pf.getAlternativa(j) + "\n");
+                            }                          
+                        } else if(p instanceof PerguntaLista)
+                        {
+                            // Escreve no arquivo as alternativas daquela pergunta
+                            PerguntaFechada pf = (PerguntaFechada)p;
+                            int count = pf.getNumeroAlternativas();
+                            
+                            for(int j = 0; j < count; j++)
+                            {
+                                raf_tempFile.writeBytes("@" + pf.getAlternativa(j) + "\n");
+                            }  
+                        } else {
+                            throw new InvalidClassException("Tipo de pergunta inválida especificada");
+                        }
+                    }
+                    
+                    raf_tempFile.writeBytes( "\n" + super.nome_fim_secao_respostas + "\n");
+                } else {
+                    raf_tempFile.writeBytes(original_file_line + "\n");
+                }
+            }
+            // Fecha o arquivo temporário
+        } catch(IOException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        
+        // Fecha o arquivo original
+        stop();
+        
+        // Fecha o arquivo temporário
+        if(raf_tempFile != null)
+            raf_tempFile.close();
+        
+        // Sobrescreve o arquivo original
+        tempFileHandle.renameTo(super.outputFileHandle);
+        
+        System.out.println( "Arquivo salvo em: " + super.outputFileHandle.getAbsolutePath());
     }
 };

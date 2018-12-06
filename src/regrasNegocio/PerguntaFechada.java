@@ -20,7 +20,8 @@ public class PerguntaFechada extends Pergunta {
      */
     public PerguntaFechada(String texto, String[] alternativas){
         super(texto);
-        setAlternativas(alternativas);
+        this.setAlternativas(alternativas);
+        this.alternativas = null;
     }
 
     /**

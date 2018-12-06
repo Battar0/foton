@@ -9,6 +9,7 @@ import regrasNegocio.*;
 import Excecoes.*;
 import FDF.fdfFile;
 import FDF.fdfWriter;
+import java.io.IOException;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import java.time.Instant;
@@ -420,14 +421,14 @@ public class FormWindow extends javax.swing.JFrame {
                 int minuto = calendar.get(Calendar.MINUTE);
                 int segundo = calendar.get(Calendar.SECOND);
                 
+                // Não precisa colocar o .fdf no nome do arquivo, pois a classe já faz isso automaticamente
                 fdfWriter fdf = new fdfWriter("formulario_" + dia + "_" + mes + "_" + ano + "_" + hora + "_" + minuto + "_" + segundo);
                 
-                String[] lines = taPerguntas.getText().split("\n");
-                
-                for(String line : lines) 
+                try {
+                    fdf.writeFormulario(formulario);
+                } catch(IOException e)
                 {
-                    // FIXME: é preciso encontrar uma forma de diferenciar as perguntas de cada tipo
-                    //fdf.writePergunta(line, fdfFile.tipos_perguntas.LIVRE, segundo, lines);
+                    JOptionPane.showMessageDialog(mwd, e.getMessage(), "Erro ao salvar o formulário", JOptionPane.ERROR_MESSAGE);
                 }
                 
                 dispose();
