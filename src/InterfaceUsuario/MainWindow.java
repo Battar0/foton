@@ -29,7 +29,7 @@ public class MainWindow extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         
-        lista = new ArrayList<Formulario>();
+        lista = new ArrayList<>();
         
         // Precisamos escanear o local em busca de arquivos FDF e preencher a jComboBox com o nome desses arquivos
         File pasta_atual = new File(".");
@@ -38,7 +38,6 @@ public class MainWindow extends javax.swing.JFrame {
         String extensao;
         int posicao_ponto;
         int tamanho_substring;
-        int quantidade_formularios = 0;
         
         System.out.println( "Pasta atual: " + pasta_atual.getAbsolutePath());
         
@@ -63,12 +62,11 @@ public class MainWindow extends javax.swing.JFrame {
                 if(extensao.toLowerCase().equals("fdf"))
                 {
                     // Então o arquivo é um formulário do fóton
-                    cbFormularios.addItem(nome_arquivo);
-                    quantidade_formularios++;
+                    //lista.add(form);
                 }
             }
             
-            if(quantidade_formularios == 0)
+            if(lista.isEmpty())
                 System.out.println("Nenhum formulário encontrado");
             
         } catch(NullPointerException e)
