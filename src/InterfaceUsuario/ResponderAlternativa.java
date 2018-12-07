@@ -134,8 +134,8 @@ public class ResponderAlternativa extends javax.swing.JFrame {
 
         // If impede que a janela seja fechada se não houver alternativas escolhidas
         if(!jLista.isSelectionEmpty()){
-            String aux = jLista.getSelectedValuesList().toString();
-            String[] resposta = aux.split("\n");
+            String[] resposta = new String[jLista.getSelectedValuesList().size()];
+            jLista.getSelectedValuesList().toArray(resposta);
 
             try {
                 pergunta.setRespostas(resposta);

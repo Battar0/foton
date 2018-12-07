@@ -14,7 +14,7 @@ public class PerguntaFechada extends Pergunta {
     /**
      * as alternativas da pergunta fechada
      */
-    private String[] alternativas = { "" };
+    private String[] alternativas;
 
     /**
      * Cria uma pergunta fechada e inicializa os atributos texto e alternativas
@@ -46,10 +46,10 @@ public class PerguntaFechada extends Pergunta {
 
         //checa se todas as respostas estão presentes nas alternativas
         boolean valida = false;
-        for(int i = 0; i < alternativas.length; i++){
+        for(int i = 0; i < respostas.length; i++){
             valida = false;
-            for(int j = 0; j < respostas.length; j++) {
-                if (alternativas[i].equals(respostas[j])) {
+            for(int j = 0; j < alternativas.length; j++) {
+                if (respostas[i].equals(alternativas[j])) {
                     valida = true;
                     break;
                 }
