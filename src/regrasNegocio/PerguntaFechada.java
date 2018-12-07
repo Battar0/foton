@@ -9,7 +9,7 @@ import Excecoes.RespostaRepetidaException;
  *
  * @author b2198
  */
-public class PerguntaFechada extends Pergunta {
+public abstract class PerguntaFechada extends Pergunta {
 
     /**
      * as alternativas da pergunta fechada
