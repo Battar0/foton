@@ -6,8 +6,14 @@
 package FDF;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.io.RandomAccessFile;
+import java.util.Base64;
+import java.util.Base64.Decoder;
+
+import regrasNegocio.Formulario;
+import regrasNegocio.PerguntaLista;
 
 /**
  *  Executa todas as operações de leitura em um formulário FDF
@@ -232,5 +238,140 @@ public class fdfReader extends fdfFormat
         }
         
         return null;
+    }
+    
+    /**
+     *
+     * @param nome_arquivo
+     * Abre um arquivo FDF, lê suas informações e retorna uma classe do tipo Formulário
+     * já instanciada, contendo todas as informações extraídas do arquivo.
+     * @return
+     * Retorna null caso o arquivo contenha algum erro em seu conteúdo
+     * @throws java.io.FileNotFoundException
+     * Lança essa exceção caso o arquivo não exista
+     */
+    public Formulario readFormulario(String nome_arquivo) throws FileNotFoundException, IOException
+    {
+        RandomAccessFile raf;
+        FileReader fr;
+        Formulario form;
+        fdfFile ff = new fdfFile();
+        Decoder dec = Base64.getDecoder();
+        
+        // Apenas para verificar se o arquivo existe
+        fr = new FileReader(nome_arquivo);
+        fr.close();
+        
+        raf = new RandomAccessFile(nome_arquivo, "rws");
+        form = new Formulario();
+        
+        if(!ff.isValid(nome_arquivo))
+            return null;
+        
+        String criacao, inicio, termino;
+        String line;
+        String[] vline;
+        
+        line = raf.readLine();
+        criacao = String.valueOf(dec.decode(line));
+        line = raf.readLine();
+        inicio = String.valueOf(dec.decode(line));
+        line = raf.readLine();
+        termino = String.valueOf(dec.decode(line));
+        
+        
+        form.setDataInicio(inicio);
+        form.setDataTermino(termino);
+        form.setDataCriacao(criacao);
+        
+        // Obtém o nome do formulário
+        vline = raf.readLine().split("=");
+        
+        if(vline.length != 2)
+            form.setNome("");
+        else
+            form.setNome(vline[1]);
+        
+        // Obtém a quantidade de questões que compõem o formulário
+        vline = raf.readLine().split("=");
+        
+        if(vline.length != 2)
+            form.setQuantidadeQuestoes(0);
+        else
+            form.setQuantidadeQuestoes(Integer.parseInt(vline[1]));
+        
+        // Extrai todas as perguntas do arquivo
+        while(true)
+        {
+            line = raf.readLine();
+            if(line == null)
+                break;
+            
+            if(line.equals(nome_secao_perguntas))
+            {
+                do
+                {
+                    // Pulo as linhas vazias e vou para a parte TIPO,ID
+                    do {
+                        line = raf.readLine();
+                    } while(line.isEmpty());
+
+                    // Extraio o tipo, o ID e o enunciado da pergunta em questão
+                    vline = line.split(",");
+
+                    if(vline.length != 2)
+                    {
+                        // O arquivo está mal-formatado
+                        raf.close();
+                        return null;
+                    }
+
+                    String tipo = vline[0].substring(1).toUpperCase();
+                    
+                    // Enunciado
+                    do {
+                        line = raf.readLine();
+                    } while(!line.startsWith("#"));
+                    
+                    String enunciado = line.substring(1);
+                    String alternativa;
+                    int c = 0;
+                    
+                    // Verifico qual é o tipo de pergunta. Após isso, basta extrair o as alternativas de cada uma, armazenar em um
+                    // vetor e criar uma instância correspondente ao tipo da pergunta em questão
+                    
+                    if(tipo.equals(ff.get_tipo_str(tipos_perguntas.LISTA)))
+                    {
+                        PerguntaLista pl = new PerguntaLista(enunciado, vline);
+                        
+                        
+                        do {
+                            line = raf.readLine();
+                            //alternativas[c] = line.substring(1);
+                            c++;
+                        } while(line.startsWith("@"));
+                        
+                    } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.LIVRE)))
+                    {
+                         // Esse tipo de pergunta não possui alternativas
+                    } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.OPCIONAL)))
+                    {
+
+                    } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.ALTERNATIVA)))
+                    {
+
+                    } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.EXCLUSIVA)))
+                    {
+
+                    } else {
+                        // Tipo inválido encontrado
+                        raf.close();
+                        return null;
+                    }
+                } while(!line.equals(nome_fim_secao_perguntas));
+            }
+        }
+        
+        return form;
     }
 };

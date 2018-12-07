@@ -66,13 +66,20 @@ public class fdfFormat extends fdfFile
         Date data = Time.from(Instant.now());
         String str_data_criacao;
         Encoder b64 = Base64.getEncoder();
+        String str_data_inicio;
+        String str_data_termino;
         
         str_header_data = "" + header + "\n";
         str_data_criacao = "" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         str_data_criacao += Calendar.getInstance().get(Calendar.MONTH);
         str_data_criacao += Calendar.getInstance().get(Calendar.YEAR);
         
+        str_data_inicio = data_inicio;
+        str_data_termino = data_termino;
+        
         str_header_data += b64.encodeToString(str_data_criacao.getBytes()) + "\n";
+        str_header_data += b64.encodeToString(data_inicio.getBytes()) + "\n";
+        str_header_data += b64.encodeToString(data_termino.getBytes()) + "\n";
         str_header_data += nome_secao_nome + "=" + nomeFormulario + "\n";
         str_header_data += nome_secao_quantidade + "=" + this.quantidade_questoes + "\n";
         str_header_data += nome_secao_local_respostas + "=0" + "\n\n";

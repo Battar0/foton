@@ -7,7 +7,6 @@ package InterfaceUsuario;
 
 import regrasNegocio.*;
 import Excecoes.*;
-import FDF.fdfFile;
 import FDF.fdfWriter;
 import java.io.IOException;
 import javax.swing.JDialog;
@@ -424,10 +423,13 @@ public class FormWindow extends javax.swing.JFrame {
                 // Não precisa colocar o .fdf no nome do arquivo, pois a classe já faz isso automaticamente
                 fdfWriter fdf;
                 
-                fdf = new fdfWriter("formulario_" + formulario.getNome() + "_" + dia + + mes + ano + "_" + hora + minuto + segundo);
+                fdf = new fdfWriter("formulario_" + formulario.getNome() + "_" + dia + + mes + ano + "_" + hora + minuto + segundo,
+                formulario.getNome(), formulario.getPerguntas().size(), formulario.getDataInicio(), formulario.getDataTermino());
                 
                 try {
                     fdf.writeFormulario(formulario);
+                    
+                    JOptionPane.showMessageDialog(mwd, "Formulário salvo com sucesso!", "Fóton", JOptionPane.INFORMATION_MESSAGE);
                 } catch(IOException e)
                 {
                     JOptionPane.showMessageDialog(mwd, e.getMessage(), "Erro ao salvar o formulário", JOptionPane.ERROR_MESSAGE);

@@ -14,10 +14,10 @@ import java.io.RandomAccessFile;
 import regrasNegocio.Formulario;
 import regrasNegocio.Pergunta;
 import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaAlternativa;
 import regrasNegocio.PerguntaExclusiva;
 import regrasNegocio.PerguntaFechada;
 import regrasNegocio.PerguntaLista;
-import regrasNegocio.PerguntaOpcaoUnica;
 import regrasNegocio.PerguntaOpcional;
 
 
@@ -28,14 +28,23 @@ import regrasNegocio.PerguntaOpcional;
 public class fdfWriter extends fdfFormat
 {
     private final String arquivo;
-    private RandomAccessFile fdfWriter_file;
+    private RandomAccessFile fdfWriter_raf_file;
+    private File fdfWriter_file;
+    private final fdfFile localInstance;
     
-    public fdfWriter(String nomeArquivo)
+    public fdfWriter(String nomeArquivo, String nome_formulario, int qtd_questoes, String dataInicio, String dataTermino)
     {
         arquivo = nomeArquivo + ".fdf";
-        super.outputFileHandle = new File(this.arquivo);
         
         fdfWriter_file = null;
+        fdfWriter_raf_file = null;
+        
+        localInstance = new fdfFile(nomeArquivo, nomeFormulario, qtd_questoes, dataInicio, dataTermino);
+        localInstance.outputFileHandle = new File(this.arquivo);
+        localInstance.quantidade_questoes = qtd_questoes;
+        localInstance.nomeFormulario = nome_formulario;
+        
+        System.out.println( "[fdfWriter] arquivo inicializado: "  + localInstance.outputFileHandle.getAbsolutePath());
     }
     
     /**
@@ -44,17 +53,24 @@ public class fdfWriter extends fdfFormat
      */
     private void init() throws FileNotFoundException, IOException
     {
-        System.out.println( "Init: " + super.outputFileHandle.getAbsolutePath());
+        System.out.println( "Init: " + localInstance.outputFileHandle.getAbsolutePath());
         
-        if(super.outputFileHandle.exists())
-            fdfWriter_file = openWrite(this.arquivo, true);
+        if(localInstance.outputFileHandle.exists())
+            fdfWriter_raf_file = localInstance.openWrite(this.arquivo, true);
         else
-            fdfWriter_file = openWrite(this.arquivo);
+            fdfWriter_raf_file = localInstance.openWrite(this.arquivo);
+        
+        fdfWriter_file = new File(this.arquivo);
     }
     
+    /**
+     *  Fecha os arquivos utilizados pela instância dessa classe
+     * anteriormente abertos pela função init()
+     * @throws IOException
+     */
     private void stop() throws IOException
     {
-        closeWrite();
+        localInstance.closeWrite();
     }
     
     /**
@@ -124,11 +140,11 @@ public class fdfWriter extends fdfFormat
             String original_file_line;
             System.out.println( "Abrindo arquivo: " + localFileHandle.getAbsolutePath());
             // Preciso garantir que estou no início do arquivo
-            fdfWriter_file.seek(0);
+            fdfWriter_raf_file.seek(0);
             // Os dados precisam começar a ser gravados antes do final da seção respostas
             while(true)
             {
-                original_file_line= fdfWriter_file.readLine(); // Leio as linhas do arquivo original
+                original_file_line= fdfWriter_raf_file.readLine(); // Leio as linhas do arquivo original
                 if(original_file_line == null)
                     break;
                 
@@ -186,12 +202,14 @@ public class fdfWriter extends fdfFormat
         
         while(true)
         {
-            original_file_line = super.raf_outputStream.readLine();
+            original_file_line = localInstance.raf_outputStream.readLine();
             if(original_file_line == null)
                 break;
             
-            if(original_file_line.startsWith(super.nome_fim_secao_respostas))
+            if(!original_file_line.startsWith(super.nome_fim_secao_respostas))
             {
+                raf_tempFile.writeBytes(original_file_line + "\n");
+            } else {
                 // Pego todas as respostas, e salvo no lugar daquela seção
                 // Após isso, finalizo ela
                 for(String s: respostas)
@@ -201,8 +219,6 @@ public class fdfWriter extends fdfFormat
                     str_data = "";
                 }
                 raf_tempFile.writeBytes( "\n" + super.nome_fim_secao_respostas + "\n");
-            } else {
-                raf_tempFile.writeBytes(original_file_line + "\n");
             }
         }
         
@@ -230,21 +246,26 @@ public class fdfWriter extends fdfFormat
         int qtd_perguntas = frm.getPerguntas().size();
         RandomAccessFile raf_tempFile = null;
         
+        System.out.println( "Quantidade de perguntas adicionadas: " + qtd_perguntas);
+        
         try 
         {
             raf_tempFile = new RandomAccessFile(tempFileHandle.getName(), "rws");
-                    
+                   
+            raf_tempFile.getChannel().force(true);
+            
             String original_file_line;
             
             // Abrindo o arquivo do formulário no modo leitura/escrita
             init();
             
             // Garantindo que estaremos sempre no início do arquivo ...
-            super.raf_outputStream.seek(0);
+            fdfWriter_raf_file.seek(0);
             
             while (true) 
             {
-                original_file_line = super.raf_outputStream.readLine();
+                original_file_line = fdfWriter_raf_file.readLine();
+                
                 if(original_file_line == null)
                     break;
                 
@@ -253,8 +274,11 @@ public class fdfWriter extends fdfFormat
                     // Preciso substituir o nome armazenado pelo nome especificado
                     
                     v_str = original_file_line.split("=");
-                    v_str[1] = frm.getNome() + ", Autor: " + frm.getNomeAutor();
-                    original_file_line = v_str[0] + "=" + v_str[1];
+                    if(v_str.length == 2)
+                    {
+                        v_str[1] = frm.getNome() + ", Autor: " + frm.getNomeAutor();
+                        original_file_line = v_str[0] + "=" + v_str[1];
+                    }
                 }
                 
                 if(original_file_line.startsWith(super.nome_fim_secao_perguntas))
@@ -276,6 +300,12 @@ public class fdfWriter extends fdfFormat
                             
                         } else if(p instanceof PerguntaOpcional)
                         {
+                            // Escreve o tipo e o ID da pergunta
+                            raf_tempFile.writeBytes("=" + get_tipo_str(tipos_perguntas.OPCIONAL) + ",ID\n");
+
+                            // Escreve o texto dela
+                            raf_tempFile.writeBytes("#" + p.getTexto() + "\n");
+                            
                             // Escreve no arquivo as alternativas daquela pergunta
                             PerguntaOpcional pf = (PerguntaOpcional)p;
                             int n_alternativas = pf.getNumeroAlternativas();
@@ -290,16 +320,29 @@ public class fdfWriter extends fdfFormat
                         }
                         else if(p instanceof PerguntaExclusiva)
                         {
+                            // Escreve o tipo e o ID da pergunta
+                            raf_tempFile.writeBytes("=" + get_tipo_str(tipos_perguntas.EXCLUSIVA) + ",ID\n");
+
+                            // Escreve o texto dela
+                            raf_tempFile.writeBytes("#" + p.getTexto() + "\n");
+                            
                             // Escreve no arquivo as alternativas daquela pergunta
-                            PerguntaFechada pf = (PerguntaFechada)p;
-                            int count = pf.getNumeroAlternativas();
+                            PerguntaExclusiva pe = (PerguntaExclusiva)p;
+                            
+                            int count = pe.getNumeroAlternativas();
                             
                             for(int j = 0; j < count; j++)
                             {
-                                raf_tempFile.writeBytes("!" + pf.getAlternativa(j) + "\n");
+                                raf_tempFile.writeBytes("!" + pe.getAlternativa(j) + "\n");
                             }                          
                         } else if(p instanceof PerguntaLista)
                         {
+                            // Escreve o tipo e o ID da pergunta
+                            raf_tempFile.writeBytes("=" + get_tipo_str(tipos_perguntas.LISTA) + ",ID\n");
+
+                            // Escreve o texto dela
+                            raf_tempFile.writeBytes("#" + p.getTexto() + "\n");
+                            
                             // Escreve no arquivo as alternativas daquela pergunta
                             PerguntaLista pl = (PerguntaLista)p;
                                 
@@ -309,7 +352,23 @@ public class fdfWriter extends fdfFormat
                             {
                                 raf_tempFile.writeBytes("@" + pl.getAlternativa(j) + "\n");
                             }  
-                        } else {
+                        } else if(p instanceof PerguntaAlternativa)
+                        {
+                             // Escreve o tipo e o ID da pergunta
+                            raf_tempFile.writeBytes("=" + get_tipo_str(tipos_perguntas.ALTERNATIVA) + ",ID\n");
+
+                            // Escreve o texto dela
+                            raf_tempFile.writeBytes("#" + p.getTexto() + "\n");
+                            
+                            PerguntaAlternativa pa = (PerguntaAlternativa)p;
+                            int count = pa.getNumeroAlternativas();
+                            
+                            for(int j = 0; j < count; j++)
+                            {
+                                raf_tempFile.writeBytes("-" + pa.getAlternativa(j) + "\n");
+                            }  
+                        }
+                        else {
                             throw new InvalidClassException("Tipo de pergunta inválida especificada");
                         }
                     }
@@ -319,7 +378,6 @@ public class fdfWriter extends fdfFormat
                     raf_tempFile.writeBytes(original_file_line + "\n");
                 }
             }
-            // Fecha o arquivo temporário
         } catch(IOException e)
         {
             System.out.println("Erro: " + e.getMessage());
@@ -329,12 +387,18 @@ public class fdfWriter extends fdfFormat
         stop();
         
         // Fecha o arquivo temporário
+        if(fdfWriter_raf_file != null)
+            fdfWriter_raf_file.close();
+        
         if(raf_tempFile != null)
-            raf_tempFile.close();
+            raf_tempFile.getChannel().close();
+        
+        fdfWriter_file.delete();
         
         // Sobrescreve o arquivo original
-        tempFileHandle.renameTo(super.outputFileHandle);
-        
-        System.out.println( "Arquivo salvo em: " + super.outputFileHandle.getAbsolutePath());
+        if(tempFileHandle.renameTo(fdfWriter_file) == false)
+            System.out.println("Falha ao renomear " + tempFileHandle.getAbsolutePath());
+        else
+            System.out.println( "Arquivo salvo em: " + fdfWriter_file.getAbsolutePath());
     }
 };

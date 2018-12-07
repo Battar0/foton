@@ -5,7 +5,6 @@
  */
 package regrasNegocio;
 
-import FDF.fdfFile;
 import FDF.fdfWriter;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -37,10 +36,25 @@ public class Formulario
      */
     private String nomeAutor;
     /**
+     * Data de criação do formulário
+     */
+    private String dataCriacao;
+    /**
      * lista de perguntas do formulário
      */
     private ArrayList<Pergunta> perguntas;
-
+    /**
+     * Quantidade de questões que compõem o formulário
+     */
+    private int quantidade_questoes;
+    /**
+     *  Construtor criado única e exclusivamente para uso pelo fdfReader.readFormulario
+     */
+    public Formulario()
+    {
+        
+    }
+    
     /**
      * Cria um formulário e inicializa os atributos nome, descricao, nomeAutor e perguntas
      * 
@@ -185,5 +199,24 @@ public class Formulario
      */
     public void setDataTermino(String dataTermino) {
         this.dataTermino = dataTermino;
-    }    
+    }  
+    
+    /**
+     * Função criada exclusivamente para uso pelo método readFormulário
+     * @param dataCriacao
+     * Data de criação do formulário no formato dd/mm/yyyy
+     */
+    public void setDataCriacao(String dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+    
+    /**
+     *  Função criada exclusivamente para uso pelo método readFormulário
+     * @param qtd
+     * Quantidade de questões que deverão compor o formulário
+     */
+    public void setQuantidadeQuestoes(int qtd)
+    {
+        this.quantidade_questoes = qtd;
+    }
 }

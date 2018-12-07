@@ -6,7 +6,6 @@
 package InterfaceUsuario;
 
 import Excecoes.FormularioInexistenteException;
-import FDF.fdfFile.tipos_perguntas;
 import FDF.fdfWriter;
 import java.io.File;
 import java.io.IOException;
