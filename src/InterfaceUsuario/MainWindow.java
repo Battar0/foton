@@ -6,10 +6,15 @@
 package InterfaceUsuario;
 
 import Excecoes.FormularioInexistenteException;
+import Excecoes.RespostaException;
 import FDF.fdfFormat;
+import FDF.fdfReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import regrasNegocio.*;
@@ -73,8 +78,31 @@ public class MainWindow extends javax.swing.JFrame {
                     extensao = nome_arquivo.substring(posicao_ponto + 1, tamanho_substring);
                     if(extensao.toLowerCase().equals("fdf"))
                     {
+                        fdfReader fr = new fdfReader(arquivo.getAbsolutePath());
+                        
+                        try {
+                            try {
+                                Formulario formNovo = fr.readFormulario(arquivo.getAbsolutePath());
+                                
+                                lista.add(formNovo);
+                                
+                            } catch (FileNotFoundException ex) {
+                                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (RespostaException ex) {
+                                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }catch(IOException e)
+                        {
+                            
+                        }
                         // Então o arquivo é um formulário do fóton
                         //lista.add
+                        //cbFormularios.addItem(nome_aquivo);
+                        
+                        
+                        // Então o arquivo é um formulário do fóton
+                        //lista.add
+                        //cbFormularios.addItem(nome_aquivo);
                     }
                 }
 

@@ -526,12 +526,14 @@ public class fdfWriter extends fdfFormat
             System.out.println( "Arquivo salvo em: " + fdfWriter_file.getAbsolutePath());
             tempFileHandle.delete();
             
-            /*
+            
             String sFile = fdfEncoder.encodeFDF(fdfWriter_file.getAbsolutePath());
             fdfWriter_file.delete();
             
             fdfWriter_file.renameTo(new File(sFile));
-            */
+            
+            fdfDecoder.decodeFDF(sFile);
+            
         }
     }
 };

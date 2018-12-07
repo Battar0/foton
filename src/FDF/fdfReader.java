@@ -6,6 +6,7 @@
 package FDF;
 
 import Excecoes.NumeroRespostasIncorretoException;
+import Excecoes.RespostaException;
 import Excecoes.RespostaInvalidaException;
 import Excecoes.RespostaRepetidaException;
 import java.io.FileNotFoundException;
@@ -257,8 +258,9 @@ public class fdfReader extends fdfFormat
      * Retorna null caso o arquivo contenha algum erro em seu conteúdo
      * @throws java.io.FileNotFoundException
      * Lança essa exceção caso o arquivo não exista
+     * @throws Excecoes.RespostaRepetidaException
      */
-    public Formulario readFormulario(String nome_arquivo) throws FileNotFoundException, IOException
+    public Formulario readFormulario(String nome_arquivo) throws FileNotFoundException, IOException, RespostaException
     {
         RandomAccessFile raf;
         FileReader fr;
@@ -385,6 +387,7 @@ public class fdfReader extends fdfFormat
                         
                          PerguntaAlternativa pa = new PerguntaAlternativa(enunciado, alternativas);
                          
+                         
                          form.add(pa);
                     } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.EXCLUSIVA)))
                     {
@@ -405,6 +408,8 @@ public class fdfReader extends fdfFormat
                 } while(!line.startsWith(nome_fim_secao_perguntas));
             } else if(line.startsWith(nome_fim_secao_respostas))
             {
+                int count = 0;
+                
                 do {
                     line = raf.readLine();
                     if(!line.isEmpty())
@@ -419,8 +424,11 @@ public class fdfReader extends fdfFormat
                         // Obtendo o ID
                         int id = Integer.parseInt(first[1]);
                         
-                        // Com o tipo, podemos inicializar uma classe do tipo Pergunta e adicionar ao formulário
+                        String[] respostas = line.split("$")[1].split(";");
                         
+                        // Com o tipo, podemos inicializar uma classe do tipo Pergunta e adicionar ao formulário
+                        form.get(count).setRespostas(respostas);
+                        count++;
                     }
                 } while(!line.startsWith(nome_fim_secao_respostas));
             }
