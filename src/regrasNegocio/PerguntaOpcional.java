@@ -13,15 +13,16 @@ public class PerguntaOpcional extends PerguntaOpcaoUnica {
      * @param texto o texto da pergunta
      */
     public PerguntaOpcional(String texto) {
-        super(texto, new String[]{"sim","não"});
+        super(texto, null);
     }
 
     /**
-     * Não faz nada
+     * Define as alternativas como "Sim" e "Não"
      *
-     * @param alternativas
+     * @param alternativas irrelevante
      */
     @Override
     public void setAlternativas(String[] alternativas) {
+        super.setAlternativas(new String[]{"Sim","Não"});
     }
 }
