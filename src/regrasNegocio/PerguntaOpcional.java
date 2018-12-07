@@ -17,6 +17,11 @@ public class PerguntaOpcional extends PerguntaOpcaoUnica {
     }
 
     /**
+     * Cria uma pergunta alternativa e inicializa o atributo alternativas
+     */
+    public PerguntaOpcional(){ setAlternativas(null); }
+
+    /**
      * Define as alternativas como "Sim" e "Não"
      *
      * @param alternativas irrelevante

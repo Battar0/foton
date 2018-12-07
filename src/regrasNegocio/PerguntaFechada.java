@@ -28,6 +28,11 @@ public class PerguntaFechada extends Pergunta {
     }
 
     /**
+     * Cria uma pergunta fechada
+     */
+    public PerguntaFechada(){}
+
+    /**
      * Seta as respostas da pergunta, verificando se não há respostas repetidas ou que não estão nas alternativas
      *
      * @param respostas as respostas da pergunta

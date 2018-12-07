@@ -17,4 +17,9 @@ public class PerguntaLista extends PerguntaOpcaoUnica {
         super(texto, alternativas);
     }
 
+    /**
+     * Cria uma pergunta de lista
+     */
+    public PerguntaLista(){}
+
 }

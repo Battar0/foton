@@ -22,6 +22,11 @@ public abstract class PerguntaOpcaoUnica extends PerguntaFechada {
     }
 
     /**
+     * Cria uma pergunta de opção única
+     */
+    public PerguntaOpcaoUnica(){}
+
+    /**
      * Seta as respostas da pergunta, verificando se há apenas uma
      *
      * @param respostas as respostas da pergunta
