@@ -7,6 +7,8 @@ package InterfaceUsuario;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
+import Excecoes.RespostaException;
 import regrasNegocio.Formulario;
 import regrasNegocio.Pergunta;
 import regrasNegocio.PerguntaAberta;
@@ -121,7 +123,11 @@ public class ResponderAberta extends javax.swing.JFrame {
             String[] resposta = new String[1];
             resposta[0] = aux;
 
-            form.get(proxPergunta - 1).setRespostas(resposta);
+            try {
+                form.get(proxPergunta - 1).setRespostas(resposta);
+            }catch(RespostaException rex){
+                System.out.println("Ocorreu um erro ao inserir a resposta: " + rex.getMessage());
+            }
 
             dispose();
 

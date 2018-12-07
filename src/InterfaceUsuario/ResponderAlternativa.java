@@ -8,6 +8,8 @@ package InterfaceUsuario;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
+import Excecoes.RespostaException;
 import regrasNegocio.Formulario;
 import regrasNegocio.Pergunta;
 import regrasNegocio.PerguntaAberta;
@@ -135,7 +137,11 @@ public class ResponderAlternativa extends javax.swing.JFrame {
             String aux = jLista.getSelectedValuesList().toString();
             String[] resposta = aux.split("\n");
 
-            pergunta.setRespostas(resposta);
+            try {
+                pergunta.setRespostas(resposta);
+            }catch(RespostaException rex){
+                System.out.println("Ocorreu um erro ao inserir a resposta: " + rex.getMessage());
+            }
 
             dispose();
 

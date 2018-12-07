@@ -1,6 +1,6 @@
 package Excecoes;
 
-public class RespostaInvalidaException extends Exception {
+public class RespostaInvalidaException extends RespostaException {
 
     public RespostaInvalidaException(){
         super("A resposta não está nas alternativas");
