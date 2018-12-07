@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import Excecoes.RespostaException;
 import regrasNegocio.Formulario;
+import regrasNegocio.PerguntaAberta;
 
 /**
  *
@@ -17,6 +18,7 @@ import regrasNegocio.Formulario;
  */
 public class ResponderAberta extends javax.swing.JFrame {
     Formulario form;
+    PerguntaAberta pergunta;
     int proxPergunta;
 
     /**
@@ -31,6 +33,7 @@ public class ResponderAberta extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         form = formR;
+        pergunta = (PerguntaAberta)form.get(index);
         proxPergunta = index + 1;
         
         taEnunciado.setText(formR.get(index).getTexto());

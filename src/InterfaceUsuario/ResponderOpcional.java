@@ -133,7 +133,7 @@ public class ResponderOpcional extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
-        String aux = new String();
+        String aux;
         
         if(bSim.isSelected() || bNao.isSelected()){
             if(bSim.isSelected())
