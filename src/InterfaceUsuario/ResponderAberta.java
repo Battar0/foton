@@ -10,11 +10,6 @@ import javax.swing.JOptionPane;
 
 import Excecoes.RespostaException;
 import regrasNegocio.Formulario;
-import regrasNegocio.Pergunta;
-import regrasNegocio.PerguntaAberta;
-import regrasNegocio.PerguntaAlternativa;
-import regrasNegocio.PerguntaLista;
-import regrasNegocio.PerguntaOpcional;
 
 /**
  *
@@ -26,6 +21,10 @@ public class ResponderAberta extends javax.swing.JFrame {
 
     /**
      * Creates new form ResponderAberta
+     * @param formR
+     * Instância da classe formulário já inicializada
+     * @param index
+     * Index da pergunta a ser respondida 
      */
     public ResponderAberta(Formulario formR, int index) {
         initComponents();
@@ -130,7 +129,7 @@ public class ResponderAberta extends javax.swing.JFrame {
             }
 
             dispose();
-
+            
             if(proxPergunta < form.perguntasSize())
                 MainWindow.responderPergunta(form, proxPergunta);
 

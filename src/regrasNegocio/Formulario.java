@@ -5,8 +5,6 @@
  */
 package regrasNegocio;
 
-import FDF.fdfWriter;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 /**
@@ -52,7 +50,7 @@ public class Formulario
      */
     public Formulario()
     {
-        
+        perguntas = new ArrayList<>();
     }
     
     /**
@@ -104,7 +102,7 @@ public class Formulario
      * @return a pergunta no índice x da lista
      */
     public Pergunta get(int x){
-        return perguntas.get(x);
+            return perguntas.get(x);
     }
 
     /**

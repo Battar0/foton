@@ -9,6 +9,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.sql.Time;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,7 +38,10 @@ class fdfFile
     protected File outputFileHandle;                // Inditativo para o arquivo aberto no modo escrita
     protected String data_inicio;                   // Data em que o formulário começa a aceitar respostas
     protected String data_termino;                  // Data em que o formulário termina de aceitar respostas
-    protected final String local_formularios = "foton-formularios";
+    protected String descricaoFormulario;           // Descrição do formulário
+    protected String nomeAutor;                     // Nome do autor do formulário
+    protected final String local_formularios = "foton-formularios"; // Nome da pasta aonde os formulários estão localizados
+    protected final int LIMITE_ALTERNATIVAS = 20;
     public static enum tipos_perguntas
     {
         LIVRE, LISTA, ALTERNATIVA, EXCLUSIVA, OPCIONAL
@@ -95,18 +104,25 @@ class fdfFile
      * @param quantidade_de_questoes
      * Quantidade de questões que compõem o formulário
      */
-    public fdfFile(String filename, String nomeFormulario, int quantidade_de_questoes, String dataInicio, String dataTermino)
+    public fdfFile(String filename, String nomeFormulario, int quantidade_de_questoes, String dataInicio, String dataTermino, String autor,
+            String descricao)
     {
         this.nomeArquivo = filename;
         this.nomeFormulario = nomeFormulario;
         this.quantidade_questoes = quantidade_de_questoes;
         this.data_inicio = dataInicio;
         this.data_termino = dataTermino;
+        this.descricaoFormulario = descricao;
+        this.nomeAutor = autor;
         
         File pasta = new File(local_formularios);
-        if(pasta.mkdir())
+        if(!pasta.exists()) 
+        {
+            if(pasta.mkdir())
+                this.nomeArquivo = local_formularios + "/" + filename;
+        } else {
             this.nomeArquivo = local_formularios + "/" + filename;
-        
+        }
     }
     
     /**
@@ -136,11 +152,46 @@ class fdfFile
         return raf_inputStream;
     }
     
+    protected String buildHeader()
+    {
+        String str_header_data;
+        Date data = Time.from(Instant.now());
+        String str_data_criacao;
+        Base64.Encoder b64 = Base64.getEncoder();
+        String str_data_inicio;
+        String str_data_termino;
+        fdfFormat ff = new fdfFormat();
+        
+        str_header_data = "" + header + "\n";
+        str_data_criacao = "" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        str_data_criacao += Calendar.getInstance().get(Calendar.MONTH);
+        str_data_criacao += Calendar.getInstance().get(Calendar.YEAR);
+        
+        str_data_inicio = data_inicio;
+        str_data_termino = data_termino;
+        
+        System.out.println( "Data de término do formulário: " + str_data_inicio);
+        System.out.println( "Data de término do formulário: " + str_data_termino);
+        
+        str_header_data += b64.encodeToString(str_data_criacao.getBytes()) + "\n";
+        str_header_data += b64.encodeToString(str_data_inicio.getBytes()) + "\n";
+        str_header_data += b64.encodeToString(str_data_termino.getBytes()) + "\n";
+        str_header_data += ff.nome_secao_nome + "=" + nomeFormulario + "\n";
+        str_header_data += ff.nome_secao_autor + "=" + nomeAutor + "\n";
+        if(descricaoFormulario.contains("\n"))
+            descricaoFormulario = descricaoFormulario.replace("\n", " ");
+        str_header_data += ff.nome_secao_descricao + "=" + descricaoFormulario + "\n";
+        str_header_data += ff.nome_secao_quantidade + "=" + quantidade_questoes + "\n";
+        str_header_data += ff.nome_secao_local_respostas + "=0" + "\n\n";
+        str_header_data += ff.nome_secao_perguntas + "\n\n" + ff.nome_fim_secao_perguntas + "\n\n";
+        str_header_data += ff.nome_secao_respostas + "\n\n" + ff.nome_fim_secao_respostas + "\n";
+        
+        return str_header_data;
+    }
+        
     private void writeHeader() throws IOException
     {
-        fdfFormat fdf = new fdfFormat();
-        
-        String fdf_header = fdf.buildHeader();
+        String fdf_header = this.buildHeader();
         
         raf_outputStream.writeBytes(fdf_header);
     }

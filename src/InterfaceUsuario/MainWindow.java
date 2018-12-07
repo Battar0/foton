@@ -6,7 +6,7 @@
 package InterfaceUsuario;
 
 import Excecoes.FormularioInexistenteException;
-import FDF.fdfWriter;
+import FDF.fdfFormat;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -31,46 +31,60 @@ public class MainWindow extends javax.swing.JFrame {
         lista = new ArrayList<>();
         
         // Precisamos escanear o local em busca de arquivos FDF e preencher a jComboBox com o nome desses arquivos
-        File pasta_atual = new File(".");
-        File[] todos_arquivos;
-        String nome_arquivo;
-        String extensao;
-        int posicao_ponto;
-        int tamanho_substring;
+        fdfFormat f = new fdfFormat();
+        File pasta_atual = new File(f.getLocalFormularios());
         
-        System.out.println( "Pasta atual: " + pasta_atual.getAbsolutePath());
-        
-        todos_arquivos = pasta_atual.listFiles();
-
-        try {
-            for(File arquivo : todos_arquivos)
-            {
-                if(arquivo.isDirectory() || !arquivo.isFile())
-                    continue;
-
-                nome_arquivo = arquivo.getName();
-
-                System.out.println(nome_arquivo);
-
-                posicao_ponto = nome_arquivo.lastIndexOf(".");
-                if(posicao_ponto == -1)
-                    continue;
-
-                tamanho_substring = nome_arquivo.length();
-                extensao = nome_arquivo.substring(posicao_ponto + 1, tamanho_substring);
-                if(extensao.toLowerCase().equals("fdf"))
-                {
-                    // Então o arquivo é um formulário do fóton
-                    //lista.add(form);
-                }
-            }
-            
-            if(lista.isEmpty())
-                System.out.println("Nenhum formulário encontrado");
-            
-        } catch(NullPointerException e)
+        if(!pasta_atual.exists())
         {
-            System.out.println(e.getMessage());
+            try {
+                pasta_atual.mkdir();
+                System.out.println( "A pasta dos formulários foi criada com sucesso");
+            } catch(SecurityException e)
+            {
+                System.out.println( "Falha ao criar pasta dos formulários: " + e.getMessage());
+            }
+        } else 
+        {
+            File[] todos_arquivos;
+            String nome_arquivo;
+            String extensao;
+            int posicao_ponto;
+            int tamanho_substring;
+
+            System.out.println( "Pasta atual: " + pasta_atual.getAbsolutePath());
+
+            todos_arquivos = pasta_atual.listFiles();
+
+            try {
+                for(File arquivo : todos_arquivos)
+                {
+                    if(arquivo.isDirectory() || !arquivo.isFile())
+                        continue;
+
+                    nome_arquivo = arquivo.getName();
+
+                    System.out.println(nome_arquivo);
+
+                    posicao_ponto = nome_arquivo.lastIndexOf(".");
+                    if(posicao_ponto == -1)
+                        continue;
+
+                    tamanho_substring = nome_arquivo.length();
+                    extensao = nome_arquivo.substring(posicao_ponto + 1, tamanho_substring);
+                    if(extensao.toLowerCase().equals("fdf"))
+                    {
+                        // Então o arquivo é um formulário do fóton
+                        //lista.add
+                    }
+                }
+
+                if(lista.isEmpty())
+                    System.out.println("Nenhum formulário encontrado");
+
+            } catch(NullPointerException e)
+            {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -144,14 +158,15 @@ public class MainWindow extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bResponder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bCriar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bApagar, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bApagar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(jLabel1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addGroup(layout.createSequentialGroup()
@@ -179,7 +194,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(bApagar)
                     .addComponent(bInfo)
                     .addComponent(bSair))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         getAccessibleContext().setAccessibleDescription("");
