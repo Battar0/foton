@@ -139,8 +139,10 @@ public class ResponderAlternativa extends javax.swing.JFrame {
 
             try {
                 pergunta.setRespostas(resposta);
-            }catch(RespostaException rex){
-                System.out.println("Ocorreu um erro ao inserir a resposta: " + rex.getMessage());
+            }catch(RespostaException e){
+                JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+                JDialog dialog = optionPane.createDialog("Error");
+                dialog.setVisible(true);
             }
 
             dispose();

@@ -129,8 +129,10 @@ public class ResponderLista extends javax.swing.JFrame {
 
         try{
             form.get(proxPergunta - 1).setRespostas(resposta);
-        }catch(RespostaException rex){
-            System.out.println("Ocorreu um erro ao inserir a resposta: " + rex.getMessage());
+        }catch(RespostaException e){
+            JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
+            JDialog dialog = optionPane.createDialog("Error");
+            dialog.setVisible(true);
         }
 
         dispose();
