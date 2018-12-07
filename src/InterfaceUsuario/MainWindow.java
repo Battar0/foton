@@ -301,8 +301,10 @@ public class MainWindow extends javax.swing.JFrame {
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new MainWindow().setVisible(true);
+            //new MainWindow().setVisible(true);
         });
+        PerguntaFechada pf = new PerguntaFechada("123",new String[]{"a1","a2","a3"});
+        pf.setRespostas(new String[]{"a1","a3"});
     }
     
     void addFormulario(Formulario form){
