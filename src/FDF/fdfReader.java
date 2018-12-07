@@ -5,6 +5,9 @@
  */
 package FDF;
 
+import Excecoes.NumeroRespostasIncorretoException;
+import Excecoes.RespostaInvalidaException;
+import Excecoes.RespostaRepetidaException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -13,7 +16,12 @@ import java.util.Base64;
 import java.util.Base64.Decoder;
 
 import regrasNegocio.Formulario;
+import regrasNegocio.Pergunta;
+import regrasNegocio.PerguntaAberta;
+import regrasNegocio.PerguntaAlternativa;
+import regrasNegocio.PerguntaExclusiva;
 import regrasNegocio.PerguntaLista;
+import regrasNegocio.PerguntaOpcional;
 
 /**
  *  Executa todas as operações de leitura em um formulário FDF
@@ -307,7 +315,7 @@ public class fdfReader extends fdfFormat
             if(line == null)
                 break;
             
-            if(line.equals(nome_secao_perguntas))
+            if(line.startsWith(nome_secao_perguntas))
             {
                 do
                 {
@@ -334,43 +342,91 @@ public class fdfReader extends fdfFormat
                     } while(!line.startsWith("#"));
                     
                     String enunciado = line.substring(1);
-                    String alternativa;
+                    String[] alternativas = new String[LIMITE_ALTERNATIVAS];
                     int c = 0;
                     
                     // Verifico qual é o tipo de pergunta. Após isso, basta extrair o as alternativas de cada uma, armazenar em um
                     // vetor e criar uma instância correspondente ao tipo da pergunta em questão
                     
                     if(tipo.equals(ff.get_tipo_str(tipos_perguntas.LISTA)))
-                    {
-                        PerguntaLista pl = new PerguntaLista(enunciado, vline);
-                        
-                        
+                    { 
                         do {
                             line = raf.readLine();
-                            //alternativas[c] = line.substring(1);
+                            alternativas[c] = line.substring(1);
                             c++;
-                        } while(line.startsWith("@"));
+                        } while(line.startsWith("@") && (c < LIMITE_ALTERNATIVAS));
                         
+                         PerguntaLista pl = new PerguntaLista(enunciado, alternativas);
+                         
+                         form.add(pl);
                     } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.LIVRE)))
                     {
                          // Esse tipo de pergunta não possui alternativas
+                        PerguntaAberta pa = new PerguntaAberta(enunciado);
+                        form.add(pa);
                     } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.OPCIONAL)))
                     {
-
+                        do {
+                            line = raf.readLine();
+                            alternativas[c] = line.substring(1);
+                            c++;
+                        } while(line.startsWith("$") && (c < LIMITE_ALTERNATIVAS));
+                        
+                         PerguntaOpcional pc = new PerguntaOpcional(enunciado);
+                         
+                         form.add(pc);                        
                     } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.ALTERNATIVA)))
                     {
-
+                        do {
+                            line = raf.readLine();
+                            alternativas[c] = line.substring(1);
+                            c++;
+                        } while(line.startsWith("-") && (c < LIMITE_ALTERNATIVAS));
+                        
+                         PerguntaAlternativa pa = new PerguntaAlternativa(enunciado, alternativas);
+                         
+                         form.add(pa);
                     } else if(tipo.equals(ff.get_tipo_str(tipos_perguntas.EXCLUSIVA)))
                     {
-
-                    } else {
+                        do {
+                            line = raf.readLine();
+                            alternativas[c] = line.substring(1);
+                            c++;
+                        } while(line.startsWith("-") && (c < LIMITE_ALTERNATIVAS));
+                        
+                         PerguntaExclusiva pe = new PerguntaExclusiva(enunciado, alternativas);
+                         form.add(pe);                           
+                    } else 
+                    {
                         // Tipo inválido encontrado
                         raf.close();
                         return null;
                     }
-                } while(!line.equals(nome_fim_secao_perguntas));
+                } while(!line.startsWith(nome_fim_secao_perguntas));
+            } else if(line.startsWith(nome_fim_secao_respostas))
+            {
+                do {
+                    line = raf.readLine();
+                    if(!line.isEmpty())
+                    {
+                        // Extraio informações sobre a resposta registrada em questão
+                        
+                        // Obtendo o tipo:
+                        String[] first = line.split("$")[0].split(",");
+                        
+                        String tipo = first[0];
+                        
+                        // Obtendo o ID
+                        int id = Integer.parseInt(first[1]);
+                        
+                        // Com o tipo, podemos inicializar uma classe do tipo Pergunta e adicionar ao formulário
+                        
+                    }
+                } while(!line.startsWith(nome_fim_secao_respostas));
             }
         }
+        
+        raf.close();
         
         return form;
     }

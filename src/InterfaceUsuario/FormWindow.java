@@ -21,8 +21,15 @@ import java.util.Calendar;
 public class FormWindow extends javax.swing.JFrame {
     Formulario formulario;
     MainWindow mwd;
+    
+    private int dia_inicio, mes_inicio, ano_inicio;
+    private int dia_termino, mes_termino, ano_termino;
+    private int ano_atual, dia_atual, mes_atual;
+    
     /**
      * Creates new form NewJFrame
+     * @param mwindow
+     * Indicativo para a janela-mãe do programa
      */
     
     // Recebe o MainWindow para poder adcionar / remover formularios da lista de formularios
@@ -32,6 +39,15 @@ public class FormWindow extends javax.swing.JFrame {
         
         formulario = new Formulario(nome_formulario.getText(), descricao.getText(), nome_autor.getText());
         this.setLocationRelativeTo(null);
+        
+        dia_inicio = -1;
+        dia_termino = -1;
+        
+        mes_inicio = -1;
+        mes_termino = -1;
+        
+        ano_inicio = -1;
+        ano_termino = -1;
         
         mwd = mwindow;
         mwd.setVisible(false);
@@ -423,10 +439,15 @@ public class FormWindow extends javax.swing.JFrame {
                 // Não precisa colocar o .fdf no nome do arquivo, pois a classe já faz isso automaticamente
                 fdfWriter fdf;
                 
-                fdf = new fdfWriter("formulario_" + formulario.getNome() + "_" + dia + + mes + ano + "_" + hora + minuto + segundo,
-                formulario.getNome(), formulario.getPerguntas().size(), formulario.getDataInicio(), formulario.getDataTermino());
+                fdf = new fdfWriter("formulario_" + dia + + mes + ano + "_" + hora + minuto + segundo, 
+                        formulario.getNome(), formulario.perguntasSize(), 
+                        formulario.getDataInicio(), 
+                        formulario.getDataTermino(), 
+                        formulario.getNomeAutor(), 
+                        formulario.getDescricao());
                 
-                try {
+                try 
+                {
                     fdf.writeFormulario(formulario);
                     
                     JOptionPane.showMessageDialog(mwd, "Formulário salvo com sucesso!", "Fóton", JOptionPane.INFORMATION_MESSAGE);
@@ -441,7 +462,7 @@ public class FormWindow extends javax.swing.JFrame {
         
         catch (DescricaoObrigatoriaNaoInformadaException e){
             JOptionPane optionPane = new JOptionPane(e.getMessage(), JOptionPane.ERROR_MESSAGE);    
-            JDialog dialog = optionPane.createDialog("Error");
+            JDialog dialog = optionPane.createDialog("Erro");
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_bSalvarActionPerformed
@@ -461,7 +482,8 @@ public class FormWindow extends javax.swing.JFrame {
 
     private void bModificarPerguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bModificarPerguntaActionPerformed
     
-        try{
+        try
+        {
             Pergunta pergunta = null;
 
             if(perguntas.getItemCount() == 0)
@@ -544,20 +566,17 @@ public class FormWindow extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(mwd, "Data de início inválida", "Erro", JOptionPane.ERROR_MESSAGE);
             } else 
             {
-                int dia, mes, ano;
-                int ano_atual, dia_atual, mes_atual;
-                
-                dia = Integer.parseInt(data[0]);
-                mes = Integer.parseInt(data[1]);
-                ano = Integer.parseInt(data[2]);
+                dia_inicio = Integer.parseInt(data[0]);
+                mes_inicio= Integer.parseInt(data[1]);
+                ano_inicio = Integer.parseInt(data[2]);
                 
                 dia_atual = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                 mes_atual = Calendar.getInstance().get(Calendar.MONTH) + 1;
                 ano_atual = Calendar.getInstance().get(Calendar.YEAR);
                 
-                System.out.println("Data atual: " + dia_atual + "/" + mes_atual + "/" + ano_atual);
-                
-                if(ano < ano_atual || (ano == ano_atual && mes < mes_atual) || (ano == ano_atual && dia < dia_atual))
+                if(ano_inicio < ano_atual || (ano_inicio == ano_atual && 
+                        mes_inicio < mes_atual) || (ano_inicio == ano_atual && 
+                        dia_inicio < dia_atual))
                 {
                     JOptionPane.showMessageDialog(mwd, "Data de início inválida: não é possível configurar o formulário para começar a ser respondido no passado", "Erro", JOptionPane.ERROR_MESSAGE);
                     dataInicio.setText("");
@@ -569,7 +588,63 @@ public class FormWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_dataInicioFocusLost
 
     private void dataTerminoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_dataTerminoFocusLost
-        formulario.setDataInicio(dataTermino.getText());
+        String texto = dataTermino.getText();
+        boolean bValido = true;
+        
+        if(!texto.isEmpty())
+        {
+            // Validar a data fornecida
+            String[] data = texto.split("/");
+            
+            if(data.length != 3)
+            {
+                JOptionPane.showMessageDialog(mwd, "Data de início inválida", "Erro", JOptionPane.ERROR_MESSAGE);
+            } else 
+            {
+                dia_termino = Integer.parseInt(data[0]);
+                mes_termino = Integer.parseInt(data[1]);
+                ano_termino = Integer.parseInt(data[2]);
+                
+                dia_atual = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                mes_atual = Calendar.getInstance().get(Calendar.MONTH) + 1;
+                ano_atual = Calendar.getInstance().get(Calendar.YEAR);
+                
+                // Agora precisamos verificar se a data de término é válida
+                if(dia_inicio == -1 || mes_inicio == -1 || ano_inicio == 1)
+                    return;
+                
+                int diff_ano;
+                int diff_mes;
+                int diff_dia;
+                
+                diff_ano = ano_termino - ano_inicio;
+                diff_mes = mes_termino - mes_inicio;
+                diff_dia = dia_termino - dia_inicio;
+                
+                if(diff_ano < 0)
+                {
+                    bValido = false;
+                }
+                else 
+                {
+                    if(diff_ano == 0)
+                    {
+                        if(diff_mes < 0) 
+                            bValido = false;
+                        else 
+                        {
+                            if(diff_mes == 0 && diff_dia < 0)
+                                bValido = false;
+                        }   
+                    }
+                }
+                
+                if(bValido)
+                    formulario.setDataTermino(texto);
+                else
+                    JOptionPane.showMessageDialog(mwd, "Data de término inválida", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_dataTerminoFocusLost
 
     private void bDescartarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDescartarActionPerformed

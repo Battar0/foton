@@ -40,6 +40,11 @@ public class ResponderLista extends javax.swing.JFrame {
         for(int count = 0; count < pergunta.getNumeroAlternativas(); count++)
             jLista.addItem(pergunta.getAlternativa(count));
     }
+    
+    public ResponderLista(){
+        initComponents();
+        this.setLocationRelativeTo(null);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.

@@ -35,6 +35,11 @@ public class ResponderOpcional extends javax.swing.JFrame {
         
         taEnunciado.setText(formR.get(index).getTexto());
     }
+    
+    public ResponderOpcional(){
+        initComponents();
+        this.setLocationRelativeTo(null);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -133,7 +138,7 @@ public class ResponderOpcional extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bAvançarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAvançarActionPerformed
-        String aux = new String();
+        String aux;
         
         if(bSim.isSelected() || bNao.isSelected()){
             if(bSim.isSelected())
