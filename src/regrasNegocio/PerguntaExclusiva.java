@@ -16,4 +16,9 @@ public class PerguntaExclusiva extends PerguntaOpcaoUnica {
     public PerguntaExclusiva(String texto, String[] alternativas) {
         super(texto, alternativas);
     }
+
+    /**
+     * Cria uma pergunta exclusiva
+     */
+    public PerguntaExclusiva(){}
 }

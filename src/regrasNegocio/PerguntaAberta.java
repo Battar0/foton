@@ -17,6 +17,11 @@ public class PerguntaAberta extends Pergunta {
     public PerguntaAberta(String texto){
         super(texto);
     }
+
+    /**
+     * Cria uma pergunta aberta
+     */
+    public PerguntaAberta(){}
     
     //
 

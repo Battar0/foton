@@ -15,4 +15,9 @@ public class PerguntaAlternativa extends PerguntaFechada {
         super(texto, alternativas);
     }
 
+    /**
+     * Cria uma pergunta alternativa
+     */
+    public PerguntaAlternativa(){}
+
 }

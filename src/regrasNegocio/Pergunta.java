@@ -33,6 +33,11 @@ public abstract class Pergunta
     public Pergunta(String texto){
         setTexto(texto);
     }
+
+    /**
+     * Cria uma pergunta
+     */
+    public Pergunta(){}
     /**
      *
      * @return o texto da pergunta

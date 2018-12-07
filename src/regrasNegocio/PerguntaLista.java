@@ -16,4 +16,10 @@ public class PerguntaLista extends PerguntaOpcaoUnica {
     public PerguntaLista(String texto, String[] alternativas) {
         super(texto, alternativas);
     }
+
+    /**
+     * Cria uma pergunta de lista
+     */
+    public PerguntaLista(){}
+
 }
