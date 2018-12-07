@@ -30,6 +30,7 @@ public class ResponderAlternativa extends javax.swing.JFrame {
     /**
      * Creates new form ResponderAberta
      */
+    @SuppressWarnings("unchecked")
     public ResponderAlternativa(Formulario formR, int index) {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -45,6 +46,11 @@ public class ResponderAlternativa extends javax.swing.JFrame {
         
         taEnunciado.setText(formR.get(index).getTexto());
         jLista.setModel(model);
+    }
+    
+    public ResponderAlternativa(){
+        initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

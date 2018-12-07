@@ -38,6 +38,11 @@ public class ResponderAberta extends javax.swing.JFrame {
         
         taEnunciado.setText(formR.get(index).getTexto());
     }
+    
+    public ResponderAberta(){
+        initComponents();
+        this.setLocationRelativeTo(null);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
