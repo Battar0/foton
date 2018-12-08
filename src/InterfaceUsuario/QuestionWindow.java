@@ -36,19 +36,54 @@ public class QuestionWindow extends javax.swing.JFrame
         this.setLocationRelativeTo(null);
     }
     
-    public QuestionWindow(FormWindow form, String enunciado, String[] alternativas){
+    public QuestionWindow(FormWindow form, Pergunta pergunta){
         initComponents();
         defineConfig();
         
+        this.setLocationRelativeTo(null);
+        
         formPai = form;  
-        this.enunciado.setText(enunciado);
+        this.enunciado.setText(pergunta.getTexto());
         
-        if (alternativas == null)
-            cbAlternativas.getItemAt(1);
+        if (pergunta instanceof PerguntaAberta)
+            cbAlternativas.setSelectedIndex(0);
         
-        else
-            for (String alternativa : alternativas) 
-                taAlternativas.append(alternativa);
+        else if(pergunta instanceof PerguntaLista){
+            cbAlternativas.setSelectedIndex(1);
+            
+            for (int count = 0; count < ((PerguntaLista) pergunta).getNumeroAlternativas(); count++){ 
+                taAlternativas.append(((PerguntaLista) pergunta).getAlternativa(count));
+            
+                if((count + 1) < ((PerguntaLista) pergunta).getNumeroAlternativas())
+                    taAlternativas.append("\n");
+            }
+        }
+        
+        else if(pergunta instanceof PerguntaAlternativa){
+            cbAlternativas.setSelectedIndex(2);
+            
+            for (int count = 0; count < ((PerguntaAlternativa) pergunta).getNumeroAlternativas(); count++){ 
+                taAlternativas.append(((PerguntaAlternativa) pergunta).getAlternativa(count));
+            
+                if((count + 1) < ((PerguntaAlternativa) pergunta).getNumeroAlternativas())
+                    taAlternativas.append("\n");
+            }
+        }
+        
+        else if(pergunta instanceof PerguntaExclusiva){
+            cbAlternativas.setSelectedIndex(3);
+            
+            for (int count = 0; count < ((PerguntaExclusiva) pergunta).getNumeroAlternativas(); count++){ 
+                taAlternativas.append(((PerguntaExclusiva) pergunta).getAlternativa(count));
+            
+                if((count + 1) < ((PerguntaExclusiva) pergunta).getNumeroAlternativas())
+                    taAlternativas.append("\n");
+            }
+        }
+        
+        else if(pergunta instanceof PerguntaOpcional)
+            cbAlternativas.setSelectedIndex(4);
+        
     }
     
     private void defineConfig()

@@ -492,7 +492,7 @@ public class FormWindow extends javax.swing.JFrame {
             else{
                 pergunta = formulario.get(perguntas.getSelectedIndex());
 
-                QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta.getTexto(), null);
+                QuestionWindow modificarPergunta = new QuestionWindow(this, pergunta);
                 modificarPergunta.setVisible(true);
 
                 formulario.rmv(pergunta);
